@@ -1,0 +1,207 @@
+@import '~bootstrap/scss/bootstrap';
+@import 'twicon.css';
+@import '~bootstrap/dist/css/bootstrap.css';
+@import '~bootstrap-vue/dist/bootstrap-vue.css';
+@import '~vue-select/dist/vue-select.css';
+@import "~swiper/dist/css/swiper.css";
+@import "~fontawesome-4.7/css/font-awesome.css";
+body{
+  font-size: 16px;
+  i{
+    color: #3fb195;
+  }
+  a{
+    color: initial;
+    &:hover{
+      color:           initial;
+      text-decoration: none !important;
+    }
+  }
+}
+.navbar{
+  margin:           0 -30px;
+  padding:          0.25rem 3rem !important;
+  background-color: white;
+  border-bottom:    2px solid #f2f2f2;
+  img{
+    max-width: 100px;
+  }
+  .nav-item{
+    a{
+      color: rgba(0, 0, 0, 0.5) !important;
+      &:hover{
+        color:           #666666 !important;
+        text-decoration: none;
+      }
+    }
+  }
+}
+.v-select{
+  background-color: white;
+  max-width:        250px;
+  .vs__dropdown-toggle{
+    height:    40px;
+    font-size: 1.1em;
+  }
+}
+.btn-success{
+  background-color: #3FB195;
+  border-color:     #40aa90;
+  padding:          5px 1.5em;
+  letter-spacing:   3px;
+  font-size:        1.2em;
+  &:hover{
+    background-color: #3FB195;
+    border-color:     #40aa90;
+    opacity:          0.8;
+  }
+}
+.banner{
+  background-image:    url('../images/banner.png');
+  background-position: right bottom; /*Positioning*/
+  background-repeat:   no-repeat; /*Prevent showing multiple background images*/
+  background-size:     500px;
+  margin:              15px 0;
+  background-color:    white;
+  border-radius:       1em;
+  padding:             2em 1em;
+  box-shadow:          0 14px 24px rgba(0, 0, 0, 0.04);
+  min-height:          350px;
+  h1{
+    font-size:   4.5rem;
+    font-weight: bold;
+    margin:      3%;
+  }
+  .search-form-group{
+    margin: 0 3%;
+    .vs__dropdown-toggle{
+      width:     200px;
+      height:    40px;
+      font-size: 1.1em;
+    }
+    .vs__dropdown-menu{
+      width: 200px;
+    }
+    .search-form{
+      display:     flex;
+      align-items: stretch;
+      margin:      1em 0;
+      flex-wrap:   wrap;
+      .keyWord-input{
+        width:         250px;
+        margin:        0 15px;
+        border:        1px solid rgba(60, 60, 60, 0.26) !important;
+        border-radius: 4px;
+        height:        40px;
+      }
+    }
+  }
+  @media (max-width: 768px){
+    background-size: 70%;
+    align-items:     flex-start !important;
+    h1{
+      font-size:   3rem;
+      font-weight: bold;
+      margin:      0;
+    }
+  }
+}
+.carousel-section{
+  margin: 30px;
+  .title{
+    display:     flex;
+    align-items: flex-end;
+    h3{
+      font-size:   1.7em;
+      font-weight: bold;
+    }
+    .more-link{
+      font-size:       0.8em;
+      font-weight:     bold;
+      color:           #3FB195;
+      display:         inline-block;
+      text-decoration: none;
+      transition:      0.3s;
+      &:hover{
+        cursor:     pointer;
+        font-size:  0.7em;
+        transition: 0.3s;
+      }
+      &::after{
+        content:    '';
+        display:    block;
+        width:      0;
+        height:     2px;
+        background: #40aa90;
+        transition: width .3s;
+        cursor:     pointer;
+      }
+      &:hover::after{
+        width: 100%;
+      }
+    }
+    i{
+      font-size:       1.5em;
+      color:           #C499FF;
+      text-decoration: underline;
+    }
+    .tw-icon-sm{
+      font-size: 2em;
+      margin:    0 0.25em;
+    }
+    .twicon-tapioca{
+      font-size: 1.6em;
+    }
+  }
+}
+.card{
+  position:      relative;
+  overflow:      hidden;
+  height:        100%;
+  border-radius: 1.5em;
+  .card-img{
+    height:              200px;
+    transition:          all 0.5s;
+    background-size:     100%;
+    background-position: center;
+  }
+  .card-hover-description{
+    position:         absolute;
+    top:              0;
+    bottom:           0;
+    left:             0;
+    right:            0;
+    color:            #fff;
+    visibility:       hidden;
+    opacity:          0;
+    transition:       opacity .3s, visibility .3s;
+    display:          flex;
+    align-items:      center;
+    justify-content:  center;
+    font-size:        1.5em;
+    letter-spacing:   3px;
+    background-color: rgba(61, 63, 63, 0.3);
+    height:           200px; //跟圖片的height一樣
+  }
+  .card-body{
+    padding:         1rem 1.25rem;
+    display:         flex;
+    flex-direction:  column;
+    justify-content: space-around;
+  }
+  &:hover{
+    cursor: pointer;
+    .card-img{
+      background-size: 120%;
+      transition:      all 0.5s;
+    }
+    .card-hover-description{
+      visibility: visible;
+      opacity:    1;
+    }
+  }
+}
+.swiper-slide{
+  height: auto;
+}
+
