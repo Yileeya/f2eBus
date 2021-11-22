@@ -1,207 +1,152 @@
 @import '~bootstrap/scss/bootstrap';
-@import 'twicon.css';
 @import '~bootstrap/dist/css/bootstrap.css';
 @import '~bootstrap-vue/dist/bootstrap-vue.css';
-@import '~vue-select/dist/vue-select.css';
-@import "~swiper/dist/css/swiper.css";
 @import "~fontawesome-4.7/css/font-awesome.css";
+$main-color:   #939499;
+$main-yellow:  #F6E04F;
+$main-green:   #007982;
+$phone-height: calc(100vh - 100px);
 body{
-  font-size: 16px;
-  i{
-    color: #3fb195;
-  }
-  a{
-    color: initial;
-    &:hover{
-      color:           initial;
-      text-decoration: none !important;
-    }
+  font-size:   16px;
+  font-family: Microsoft JhengHei;
+}
+.row{
+  margin: 0;
+}
+.footer{
+  background-color: #939499;
+  height:           40px;
+  position:         absolute;
+  width:            100%;
+}
+.home{
+  background-image: url("../images/homePage.png");
+  background-size:  cover;
+  height:           calc(100vh - 125px);
+  @media (max-width: 768px){
+    height: calc(100vh - 102px);
   }
 }
 .navbar{
-  margin:           0 -30px;
-  padding:          0.25rem 3rem !important;
-  background-color: white;
-  border-bottom:    2px solid #f2f2f2;
-  img{
-    max-width: 100px;
-  }
-  .nav-item{
-    a{
-      color: rgba(0, 0, 0, 0.5) !important;
-      &:hover{
-        color:           #666666 !important;
-        text-decoration: none;
-      }
-    }
-  }
-}
-.v-select{
-  background-color: white;
-  max-width:        250px;
-  .vs__dropdown-toggle{
-    height:    40px;
-    font-size: 1.1em;
-  }
-}
-.btn-success{
-  background-color: #3FB195;
-  border-color:     #40aa90;
-  padding:          5px 1.5em;
-  letter-spacing:   3px;
-  font-size:        1.2em;
-  &:hover{
-    background-color: #3FB195;
-    border-color:     #40aa90;
-    opacity:          0.8;
-  }
-}
-.banner{
-  background-image:    url('../images/banner.png');
-  background-position: right bottom; /*Positioning*/
-  background-repeat:   no-repeat; /*Prevent showing multiple background images*/
-  background-size:     500px;
-  margin:              15px 0;
-  background-color:    white;
-  border-radius:       1em;
-  padding:             2em 1em;
-  box-shadow:          0 14px 24px rgba(0, 0, 0, 0.04);
-  min-height:          350px;
-  h1{
-    font-size:   4.5rem;
+  background-color: #939499 !important;
+  padding-top:      1.5em;
+  .navbar-brand{
+    color:       #F6E04F;
     font-weight: bold;
-    margin:      3%;
+    font-size:   1.8em;
   }
-  .search-form-group{
-    margin: 0 3%;
-    .vs__dropdown-toggle{
-      width:     200px;
-      height:    40px;
-      font-size: 1.1em;
+  .nav-link a{
+    font-size: 1.4em;
+    color:     white !important;
+    margin:    0 1em;
+    &:hover{
+      opacity:         0.9;
+      transform:       scale(0.95);
+      text-decoration: none;
     }
-    .vs__dropdown-menu{
-      width: 200px;
-    }
-    .search-form{
-      display:     flex;
-      align-items: stretch;
-      margin:      1em 0;
-      flex-wrap:   wrap;
-      .keyWord-input{
-        width:         250px;
-        margin:        0 15px;
-        border:        1px solid rgba(60, 60, 60, 0.26) !important;
-        border-radius: 4px;
-        height:        40px;
-      }
-    }
+  }
+  .right-nav-item .nav-link a{
+    font-size: 1.1em;
+    margin:    0 1em;
   }
   @media (max-width: 768px){
-    background-size: 70%;
-    align-items:     flex-start !important;
-    h1{
-      font-size:   3rem;
-      font-weight: bold;
-      margin:      0;
+    padding-top: 0;
+    transition:  0.2s;
+    .navbar-brand{
+      color: transparent;
+    }
+    .nav-link, .right-nav-item .nav-link{
+      text-align: center;
+      margin:     0;
+      font-size:  1.2em;
     }
   }
 }
-.carousel-section{
-  margin: 30px;
-  .title{
-    display:     flex;
-    align-items: flex-end;
-    h3{
-      font-size:   1.7em;
-      font-weight: bold;
+.time-line-area{
+  display:      flex;
+  padding-left: 115px;
+  .timeline{
+    &:after{
+      width: 2px;
     }
-    .more-link{
-      font-size:       0.8em;
-      font-weight:     bold;
-      color:           #3FB195;
-      display:         inline-block;
-      text-decoration: none;
-      transition:      0.3s;
-      &:hover{
-        cursor:     pointer;
-        font-size:  0.7em;
-        transition: 0.3s;
+    .timeline-item{
+      display:       flex;
+      align-items:   baseline;
+      border-bottom: none;
+      margin:        0 0 0 28px;
+      .timeline-circle{
+        top:          0.60em;
+        border-width: 2px;
       }
-      &::after{
-        content:    '';
-        display:    block;
-        width:      0;
-        height:     2px;
-        background: #40aa90;
-        transition: width .3s;
-        cursor:     pointer;
+      .states{
+        background:     #EFEFF0;
+        color:          #939499;
+        padding:        5px 1em;
+        min-width:      5em;
+        text-align:     center;
+        letter-spacing: 3px;
       }
-      &:hover::after{
-        width: 100%;
+      .states-ing{
+        background: #D35D78;
+        color:      white;
+        padding:    5px 1em;
+        min-width:  5em;
+        text-align: center;
+      }
+      .stop-name{
+        padding:        5px 1em;
+        font-size:      1.1em;
+        letter-spacing: 2px;
+      }
+      .bus-group{
+        position: absolute;
+        left: -130px;
+        z-index: 99;
+        width: 115px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .bus-number{
+          background-color: #019EB1;
+          color:            white;
+          padding:          2px 8px;
+          border-radius:    0.8em;
+          font-size:        0.9em;
+          .talk{
+            width:         10px;
+            height:        10px;
+            background:    #019EB1;
+            position:      absolute;
+            right:         2em;
+            top:           8px;
+            transform:     rotate(45deg);
+            border-radius: 2px;
+            z-index:       -1;
+          }
+        }
+        .fa-bus{
+          font-size:   1.5em;
+          color:       #019EB1;
+          margin-left: 8px;
+            /* animation 參數設定 */
+            animation-name:            MoveToRight; /*動畫名稱，需與 keyframe 名稱對應*/
+            animation-duration:        1.3s; /*動畫持續時間，單位為秒*/
+            animation-delay:           1.5s; /*動畫延遲開始時間*/
+            animation-iteration-count: infinite; /*動畫次數，infinite 為無限次*/
+            /* 關鍵影格(@keyframe) */
+            @keyframes MoveToRight{
+              0%{
+                transform: scale(1);
+              }
+              50%{
+                transform: scale(1.1);
+              }
+              100%{
+                transform: scale(1);
+              }
+            }
+        }
       }
     }
-    i{
-      font-size:       1.5em;
-      color:           #C499FF;
-      text-decoration: underline;
-    }
-    .tw-icon-sm{
-      font-size: 2em;
-      margin:    0 0.25em;
-    }
-    .twicon-tapioca{
-      font-size: 1.6em;
-    }
   }
 }
-.card{
-  position:      relative;
-  overflow:      hidden;
-  height:        100%;
-  border-radius: 1.5em;
-  .card-img{
-    height:              200px;
-    transition:          all 0.5s;
-    background-size:     100%;
-    background-position: center;
-  }
-  .card-hover-description{
-    position:         absolute;
-    top:              0;
-    bottom:           0;
-    left:             0;
-    right:            0;
-    color:            #fff;
-    visibility:       hidden;
-    opacity:          0;
-    transition:       opacity .3s, visibility .3s;
-    display:          flex;
-    align-items:      center;
-    justify-content:  center;
-    font-size:        1.5em;
-    letter-spacing:   3px;
-    background-color: rgba(61, 63, 63, 0.3);
-    height:           200px; //跟圖片的height一樣
-  }
-  .card-body{
-    padding:         1rem 1.25rem;
-    display:         flex;
-    flex-direction:  column;
-    justify-content: space-around;
-  }
-  &:hover{
-    cursor: pointer;
-    .card-img{
-      background-size: 120%;
-      transition:      all 0.5s;
-    }
-    .card-hover-description{
-      visibility: visible;
-      opacity:    1;
-    }
-  }
-}
-.swiper-slide{
-  height: auto;
-}
-
