@@ -1,5 +1,5 @@
 <template>
-    <div style="padding: 2em 0;min-height: calc(100vh - 100px);">
+    <div class="search-page">
         <div class="search-group">
             <input v-model="search" class="form-control form-control-lg" placeholder="請輸入公車路線關鍵字">
             <i class="fa fa-search fa-2x" aria-hidden="true"></i>
@@ -42,6 +42,10 @@
 </script>
 
 <style scoped lang="scss">
+    .search-page{
+        padding: 30px 0;
+        min-height: calc(100vh - 100px);
+    }
     .search-group{
         display:         flex;
         align-items:     center;

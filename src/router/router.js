@@ -20,9 +20,14 @@ const routes = [
                 component: () => import('../components/Search/SearchBusPage')
             },
             {
-                path: 'timeFrequency',
-                name: 'timeFrequency',
-                component: () => import('../components/TimeFrequency/TimeFrequencyPage')
+                path: 'timeArrival',
+                name: 'timeArrival',
+                component: () => import('../components/TimeArrivalPage/TimeArrivalPage')
+            },
+            {
+                path: 'schedule',
+                name: 'schedule',
+                component: () => import('../components/Schedule/SchedulePage')
             },
         ]
     }

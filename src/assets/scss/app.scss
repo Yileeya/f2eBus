@@ -5,10 +5,16 @@
 $main-color:   #939499;
 $main-yellow:  #F6E04F;
 $main-green:   #007982;
-$phone-height: calc(100vh - 100px);
+$phone-height: calc(100vh - 101px);
 body{
   font-size:   16px;
   font-family: Microsoft JhengHei;
+  .home, .schedule-page, .time-arrival-page, .search-page{
+    min-height: $phone-height;
+    @media (max-width: 768px){
+      height: $phone-height;
+    }
+  }
 }
 .row{
   margin: 0;
@@ -20,12 +26,9 @@ body{
   width:            100%;
 }
 .home{
-  background-image: url("../images/homePage.png");
+  background-image: url("../images/PhoneBg.svg");
   background-size:  cover;
   height:           calc(100vh - 125px);
-  @media (max-width: 768px){
-    height: calc(100vh - 102px);
-  }
 }
 .navbar{
   background-color: #939499 !important;
@@ -52,9 +55,6 @@ body{
   @media (max-width: 768px){
     padding-top: 0;
     transition:  0.2s;
-    .navbar-brand{
-      color: transparent;
-    }
     .nav-link, .right-nav-item .nav-link{
       text-align: center;
       margin:     0;
@@ -99,12 +99,12 @@ body{
         letter-spacing: 2px;
       }
       .bus-group{
-        position: absolute;
-        left: -130px;
-        z-index: 99;
-        width: 115px;
-        display: flex;
-        align-items: center;
+        position:        absolute;
+        left:            -130px;
+        z-index:         99;
+        width:           115px;
+        display:         flex;
+        align-items:     center;
         justify-content: center;
         .bus-number{
           background-color: #019EB1;
@@ -125,26 +125,58 @@ body{
           }
         }
         .fa-bus{
-          font-size:   1.5em;
-          color:       #019EB1;
-          margin-left: 8px;
-            /* animation 參數設定 */
-            animation-name:            MoveToRight; /*動畫名稱，需與 keyframe 名稱對應*/
-            animation-duration:        1.3s; /*動畫持續時間，單位為秒*/
-            animation-delay:           1.5s; /*動畫延遲開始時間*/
-            animation-iteration-count: infinite; /*動畫次數，infinite 為無限次*/
-            /* 關鍵影格(@keyframe) */
-            @keyframes MoveToRight{
-              0%{
-                transform: scale(1);
-              }
-              50%{
-                transform: scale(1.1);
-              }
-              100%{
-                transform: scale(1);
-              }
+          font-size:                 1.5em;
+          color:                     #019EB1;
+          margin-left:               8px;
+          /* animation 參數設定 */
+          animation-name:            MoveToRight; /*動畫名稱，需與 keyframe 名稱對應*/
+          animation-duration:        1.3s; /*動畫持續時間，單位為秒*/
+          animation-delay:           1.5s; /*動畫延遲開始時間*/
+          animation-iteration-count: infinite; /*動畫次數，infinite 為無限次*/
+          /* 關鍵影格(@keyframe) */
+          @keyframes MoveToRight{
+            0%{
+              transform: scale(1);
             }
+            50%{
+              transform: scale(1.1);
+            }
+            100%{
+              transform: scale(1);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+.time-header{
+  padding:   15px;
+  font-size: 1.2em;
+  .time-header-title{
+    display:         flex;
+    justify-content: space-between;
+    margin-bottom:   15px;
+    .route-name{
+      font-weight: bold;
+      font-size:   1.2em;
+    }
+    .btn-group{
+      display: flex;
+      .fa{
+        background:      #333333;
+        color:           white;
+        border-radius:   5px;
+        width:           35px;
+        height:          35px;
+        display:         flex;
+        justify-content: center;
+        align-items:     center;
+        margin:          0 5px;
+        &:hover, &:focus{
+          cursor:    pointer;
+          opacity:   0.9;
+          transform: scale(0.95);
         }
       }
     }

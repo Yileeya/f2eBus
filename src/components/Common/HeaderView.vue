@@ -1,6 +1,6 @@
 <template>
     <b-navbar toggleable="lg" type="dark" variant="info">
-        <b-navbar-brand href="/">HOME</b-navbar-brand>
+        <b-navbar-brand href="/">F2EBus</b-navbar-brand>
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
