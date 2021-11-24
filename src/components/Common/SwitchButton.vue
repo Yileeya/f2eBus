@@ -1,32 +1,64 @@
 <template>
     <div class="switch-group" :class="colorGroup">
             <span class="go"
-                  :class="[{'white': switchRoute}, {'pointer': switchRoute}]"
-                  @click="switchRoute = false">
-                往淡水
+                  :class="[{'white': isStartStop}, {'pointer': isStartStop}]"
+                  @click="isStartStop = false">
+                {{ startAndEndStop[0] }}
             </span>
         <label class="switch">
-            <input type="checkbox" v-model="switchRoute">
+            <input type="checkbox" v-model="isStartStop">
             <span class="slider"></span>
         </label>
         <span class="back"
-              :class="[{'white': !switchRoute}, {'pointer': !switchRoute}]"
-              @click="switchRoute = true">
-                往台北火車站
+              :class="[{'white': !isStartStop}, {'pointer': !isStartStop}]"
+              @click="isStartStop = true">
+               {{ startAndEndStop[1] }}
             </span>
     </div>
 </template>
 
 <script>
+    import {mapState} from 'vuex';
+
     export default {
         name: "SwitchButton",
         props: {
             colorGroup: String
         },
+        computed: {
+            ...mapState({
+                busRoute: state => state.busRoute
+            })
+        },
+        watch: {
+            isStartStop(newVal) {
+                let routeId = this.busRoute.subRouteUID.slice(0, -1);
+                let headSign = null;
+                if(newVal == false) {
+                    routeId = routeId + '1';
+                    headSign = this.startAndEndStop[0] + '→' + this.startAndEndStop[1]
+                } else {
+                    routeId = routeId + '2';
+                    headSign = this.startAndEndStop[1] + '→' + this.startAndEndStop[0]
+                }
+
+                let busRoute = {
+                    subRouteUID: routeId,
+                    subRouteName: this.busRoute.subRouteName,
+                    headSign: headSign
+                }
+                this.$store.commit('UPDATE_BUS_ROUTE', busRoute);
+                this.$emit('switch')
+            }
+        },
         data() {
             return {
-                switchRoute: false
+                isStartStop: false,
+                startAndEndStop: []
             }
+        },
+        created() {
+            this.startAndEndStop = this.busRoute.headSign.split('→');
         }
     }
 </script>

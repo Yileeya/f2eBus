@@ -5,14 +5,14 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         isLoading: false,
-        subRouteUID: null
+        busRoute: null
     },
     mutations: {
         ['UPDATE_LOADING'](state, isLoading) {
             state.isLoading = isLoading;
         },
-        ['UPDATE_SUB_ROUTE_UID'](state, subRouteUID) {
-            state.subRouteUID = subRouteUID;
+        ['UPDATE_BUS_ROUTE'](state, busRoute) {
+            state.busRoute = busRoute;
         },
     },
     actions: {},

@@ -46,6 +46,15 @@ const methods = {
             return res.data
         }
     },
+    async getBusOperator(OperatorID){
+        let url = `${ptxUrl}/Operator/City/Chiayi?$select=OperatorName&$filter=OperatorID eq '${OperatorID}'&$top=30&$format=JSON`
+        let res = await axios.get(url, {
+            headers: this.getAuthorizationHeader()
+        });
+        if(res.status == 200) {
+            return res.data
+        }
+    },
 };
 Vue.mixin({
     methods: methods

@@ -1,22 +1,28 @@
 <template>
-    <div class="schedule-page" v-if="busSchedule">
+    <div class="schedule-page" v-if="busRoute">
         <div class="time-header">
-            <div class="time-header-title">{{subRouteUID}}
-                <div class="route-name">{{ busSchedule.SubRouteName.Zh_tw }}</div>
+            <div class="time-header-title">
+                <div class="route-name">{{ busRoute.subRouteName }}</div>
                 <div class="btn-group">
                     <router-link to="/timeArrival">
                         <i class="fa fa-list-ul" aria-hidden="true"/>
                     </router-link>
                 </div>
             </div>
-            <switch-button :color-group="'schedule-switch-group'"/>
+            <switch-button :color-group="'schedule-switch-group'" @switch="fetchData"/>
         </div>
         <div>
-            <!--            <div class="bus-company">營運業者：XX客運</div>-->
-            <div v-for="(schedule, i) in timetables" :key="i" class="bus-schedule">
+            <div class="bus-operator">
+                營運業者： {{ busOperator }}
+            </div>
+            <div v-for="(schedule, i) in timetables"
+                 :key="i"
+                 class="bus-schedule"
+                 :class="serviceDayColor(schedule.ServiceDay)">
                 <span class="index">{{ i+1 }}</span>
+                <span>{{ schedule.StopTimes[0].StopName.Zh_tw }}</span>
                 <span class="start-time">{{ schedule.StopTimes[0].ArrivalTime }}</span>
-                <span class="bus-schedule-text">{{ serviceDay(schedule.ServiceDay) }}</span>
+                <span class="bus-schedule-text">{{ showServiceDay(schedule.ServiceDay) }}</span>
             </div>
         </div>
     </div>
@@ -32,22 +38,34 @@
         components: {SwitchButton},
         computed: {
             ...mapState({
-                subRouteUID: state => state.subRouteUID
+                busRoute: state => state.busRoute
             })
         },
         data() {
             return {
                 busSchedule: null,
-                timetables:[]
+                timetables: [],
+                busOperator: null
             }
         },
         async created() {
-            let busSchedule = await this.getBusSchedule('CYI071401');
-            this.busSchedule = busSchedule[0];
-            let Timetables = this.busSchedule.Timetables
-            this.timetables =_.sortBy(Timetables, function(o) { return Number(o.TripID); });
+            if(!this.busRoute) {
+                await this.$router.push('/search');
+                return
+            }
+            await this.fetchData();
+            let busOperator = await this.getBusOperator(this.busSchedule.OperatorID);
+            this.busOperator = busOperator[0].OperatorName.Zh_tw
         },
         methods: {
+            async fetchData() {
+                let busSchedule = await this.getBusSchedule(this.busRoute.subRouteUID);
+                this.busSchedule = busSchedule[0];
+                let Timetables = this.busSchedule.Timetables;
+                this.timetables = _.sortBy(Timetables, function(o) {
+                    return Number(o.TripID);
+                });
+            },
             serviceDay(data) {
                 let arrayData = Object.values(data);
                 let notServiceDay = [];
@@ -60,19 +78,32 @@
                         serviceDay.push(i)
                     }
                 })
-                // return {notServiceDay: notServiceDay, serviceDay: serviceDay}
-                if(!notServiceDay.length) {
+                return {notServiceDay: notServiceDay, serviceDay: serviceDay}
+            },
+            showServiceDay(data) {
+                let serviceDay = this.serviceDay(data);
+
+                if(!serviceDay.notServiceDay.length) {
                     return '每日行駛'
-                } else if(notServiceDay.includes(0) && notServiceDay.includes(6)) {
+                } else if(serviceDay.notServiceDay.includes(0) && serviceDay.notServiceDay.includes(6)) {
                     return '平日行駛'
                 } else {
-                    let string = serviceDay.join('');
+                    let isSunday = false;
+                    let matchDayIndex = _.findIndex(serviceDay.serviceDay, (day) => day === 0);
+                    if(matchDayIndex !== -1)
+                        isSunday = true;
+
+                    let string = serviceDay.serviceDay.join('');
                     let zhString = Number(string).toLocaleString('zh-Hans-CN-u-nu-hanidec')
                     let toArray = (zhString.replace(',', '')).split('');
                     let text = toArray.join('、');
-
-                    return '每週' + text + '行駛'
+                    return '週' + text + (isSunday ? '、日' : '')
                 }
+            },
+            serviceDayColor(data) {
+                let serviceDay = this.serviceDay(data);
+                if(serviceDay.notServiceDay.length)
+                    return 'red-color'
             }
         }
     }
@@ -80,18 +111,23 @@
 
 <style scoped lang="scss">
     .time-header{
-        background: #F6E04F;
+        background:    #F6E04F;
+        margin-bottom: 30px;
     }
     .bus-schedule{
         background:      #EFEFF0;
-        width:           85%;
+        width:           90%;
         margin:          10px auto;
-        padding:         0.5em 2em;
+        padding:         0.5em 1em;
         border-radius:   2em;
         display:         flex;
+        flex-wrap:       wrap;
         justify-content: space-between;
+        &.red-color{
+            color: #D35D78;
+        }
     }
-    .bus-company{
+    .bus-operator{
         margin: 15px;
     }
 </style>
