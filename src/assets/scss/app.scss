@@ -12,7 +12,7 @@ body{
   .home, .schedule-page, .time-arrival-page, .search-page{
     min-height: $phone-height;
     @media (max-width: 768px){
-      height: $phone-height;
+      min-height: $phone-height;
     }
   }
 }
