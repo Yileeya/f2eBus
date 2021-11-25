@@ -68,6 +68,7 @@
         display:     flex;
         align-items: center;
         width:       100%;
+        font-size:   0.85em;
         .switch{
             position: relative;
             display:  inline-block;

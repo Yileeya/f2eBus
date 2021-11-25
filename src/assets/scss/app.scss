@@ -64,7 +64,7 @@ body{
 }
 .time-line-area{
   display:      flex;
-  padding-left: 115px;
+  padding-left: 90px;
   .timeline{
     &:after{
       width: 2px;
@@ -81,26 +81,29 @@ body{
       .states{
         background:     #EFEFF0;
         color:          #939499;
-        padding:        5px 1em;
-        min-width:      5em;
+        padding:        4px 12px;
         text-align:     center;
-        letter-spacing: 3px;
+        letter-spacing: 2px;
+        min-width:      calc(3em + 30px);
+        font-size:      12px;
       }
-      .states-ing{
+      .bus-coming{
         background: #D35D78;
         color:      white;
-        padding:    5px 1em;
-        min-width:  5em;
         text-align: center;
       }
+      .bus-leaving{
+        opacity: 0.5;
+      }
       .stop-name{
-        padding:        5px 1em;
-        font-size:      1.1em;
-        letter-spacing: 2px;
+        padding: 0 10px;
+        font-size: 1em;
+        letter-spacing: 1px;
       }
       .bus-group{
         position:        absolute;
         left:            -130px;
+        top:             1.5em;
         z-index:         99;
         width:           115px;
         display:         flex;
@@ -111,13 +114,13 @@ body{
           color:            white;
           padding:          2px 8px;
           border-radius:    0.8em;
-          font-size:        0.9em;
+          font-size:        12px;
           .talk{
-            width:         10px;
-            height:        10px;
+            width:         8px;
+            height:        8px;
             background:    #019EB1;
             position:      absolute;
-            right:         2em;
+            right:         27px;
             top:           8px;
             transform:     rotate(45deg);
             border-radius: 2px;
@@ -125,7 +128,7 @@ body{
           }
         }
         .fa-bus{
-          font-size:                 1.5em;
+          font-size:                 1.3em;
           color:                     #019EB1;
           margin-left:               8px;
           /* animation 參數設定 */

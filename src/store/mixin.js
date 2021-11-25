@@ -55,6 +55,24 @@ const methods = {
             return res.data
         }
     },
+    async getStopOfRoute(subRouteUID){
+        let url = `${ptxUrl}/StopOfRoute/City/Chiayi?$filter=SubRouteUID eq '${subRouteUID}'&$format=JSON`
+        let res = await axios.get(url, {
+            headers: this.getAuthorizationHeader()
+        });
+        if(res.status == 200) {
+            return res.data
+        }
+    },
+    async getEstimatedTimeOfArrival(subRouteUID){
+        let url = `${ptxUrl}/EstimatedTimeOfArrival/City/Chiayi?$filter=SubRouteUID eq '${subRouteUID}'&$format=JSON`
+        let res = await axios.get(url, {
+            headers: this.getAuthorizationHeader()
+        });
+        if(res.status == 200) {
+            return res.data
+        }
+    },
 };
 Vue.mixin({
     methods: methods
