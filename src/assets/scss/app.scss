@@ -96,13 +96,13 @@ body{
         opacity: 0.5;
       }
       .stop-name{
-        padding: 0 10px;
-        font-size: 1em;
+        padding:        0 10px;
+        font-size:      1em;
         letter-spacing: 1px;
       }
       .bus-group{
         position:        absolute;
-        left:            -130px;
+        left:            calc(-115px - 15px);
         top:             1.5em;
         z-index:         99;
         width:           115px;
@@ -115,6 +115,7 @@ body{
           padding:          2px 8px;
           border-radius:    0.8em;
           font-size:        12px;
+          width:            85px;
           .talk{
             width:         8px;
             height:        8px;
@@ -130,7 +131,7 @@ body{
         .fa-bus{
           font-size:                 1.3em;
           color:                     #019EB1;
-          margin-left:               8px;
+          margin-left:               5px;
           /* animation 參數設定 */
           animation-name:            MoveToRight; /*動畫名稱，需與 keyframe 名稱對應*/
           animation-duration:        1.3s; /*動畫持續時間，單位為秒*/

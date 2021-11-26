@@ -21,7 +21,6 @@
                         <span class="bus-number">
                             {{ getBus(stop.StopID) }}
                             <i class="fa fa-wheelchair" aria-hidden="true"/>
-                            <span class="talk"></span>
                         </span>
                         <i class="fa fa-bus" aria-hidden="true"></i>
                     </div>
@@ -58,7 +57,9 @@
             return {
                 stopOfRoute: [],
                 timeOfArrival: [],
-                timeTable: []
+                timeTable: [],
+                time: 60,
+                busses: []
             }
         },
         async created() {
@@ -67,8 +68,20 @@
                 return
             }
             await this.fetchData();
+            await this.setTimeCounter()
         },
         methods: {
+            async setTimeCounter(){
+                if(this.time <= 0){//倒數完成
+                    await this.fetchData();
+                    this.time = 60;
+                    await this.setTimeCounter()
+                }else{
+                    console.log((this.time) + " sec...");
+                    setTimeout(this.setTimeCounter, 1000);
+                }
+                this.time -= 1;
+            },
             async fetchData() {
                 this.timeTable = [];
                 await this.fetchStopOfRoute();
@@ -82,9 +95,22 @@
                 let timeOfArrival = this.timeOfArrival = await this.getEstimatedTimeOfArrival(this.busRoute.subRouteUID);
                 _.forEach(this.stopOfRoute, (stop) => {
                     let matchIndex = _.find(timeOfArrival, (r) => r.StopID == stop.StopID);
-                    if(typeof matchIndex == 'undefined')
-                        return
-                    else {
+                    if(typeof matchIndex == 'undefined') {
+                        let stopInfo = {
+                            StopName: stop.StopName.Zh_tw,
+                            StopID: stop.StopID,
+                            EstimateTime: -1 //不存在
+                        }
+                        this.timeTable.push(stopInfo)
+                    } else {
+                        let matchBus = _.findIndex(this.busses, (bus) => bus.PlateNumb == matchIndex.PlateNumb)
+                        if(matchBus == -1) {
+                            this.busses.push({
+                                PlateNumb: matchIndex.PlateNumb,
+                                CurrentStop: matchIndex.CurrentStop
+                            })
+                        }
+
                         let EstimateTime = null;
                         if(typeof matchIndex.EstimateTime !== 'undefined') {
                             EstimateTime = Math.floor(Number(matchIndex.EstimateTime) / 60)
@@ -93,29 +119,31 @@
                             StopName: stop.StopName.Zh_tw,
                             StopID: stop.StopID,
                             EstimateTime: EstimateTime,
-                            BusCurrentStop: matchIndex.CurrentStop
+                            PlateNumb: matchIndex.PlateNumb
                         }
                         this.timeTable.push(stopInfo)
                     }
                 })
             },
             getBus(stopId) {
-                let isOnStop = _.findIndex(this.timeOfArrival, (stop) => stop.CurrentStop == stopId)
-                if(isOnStop !== -1) {
-                    return this.timeOfArrival[isOnStop].PlateNumb
-                } else
+                let isOnStop = _.findIndex(this.busses, (stop) => stop.CurrentStop == stopId)
+                if(isOnStop !== -1)
+                    return this.busses[isOnStop].PlateNumb
+                else
                     return false
             },
             TimeArrivalText(time) {
-                if(!time)
+                if(time === null)
+                    return '尚未發車'
+                else if(Number(time) == -1) {
                     return '末班車已駛離'
-                else if(Number(time) <= 3) {
-                    return '進站中'
+                } else if(Number(time) <= 3) {
+                    return '即將進站'
                 } else
                     return time + '分'
             },
             TimeArrivalCSS(time) {
-                if(!time)
+                if(time === null || time == -1)
                     return 'bus-leaving'
 
                 if(Number(time) <= 3)
