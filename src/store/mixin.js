@@ -73,6 +73,14 @@ const methods = {
             return res.data
         }
     },
+    /**
+     * 取得票價
+     *
+     * 測試中
+     * */
+    async getFare(){
+
+    }
 };
 Vue.mixin({
     methods: methods
