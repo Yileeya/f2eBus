@@ -7,6 +7,9 @@
                     <router-link to="/timeArrival">
                         <i class="fa fa-list-ul" aria-hidden="true"/>
                     </router-link>
+                    <router-link to="/timeArrivalMap">
+                        <i class="fa fa-map" aria-hidden="true"/>
+                    </router-link>
                 </div>
             </div>
             <switch-button :color-group="'schedule-switch-group'" @switch="fetchData"/>

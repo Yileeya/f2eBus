@@ -4,7 +4,9 @@
             <div class="time-header-title">
                 <div class="route-name">{{ busRoute.subRouteName }}</div>
                 <div class="btn-group">
-                    <i class="fa fa-map" aria-hidden="true"/>
+                    <router-link to="/timeArrivalMap">
+                        <i class="fa fa-map" aria-hidden="true"/>
+                    </router-link>
                     <router-link to="/schedule">
                         <i class="fa fa-info" aria-hidden="true"/>
                     </router-link>
@@ -71,12 +73,12 @@
             await this.setTimeCounter()
         },
         methods: {
-            async setTimeCounter(){
-                if(this.time <= 0){//倒數完成
+            async setTimeCounter() {
+                if(this.time <= 0) {//倒數完成
                     await this.fetchData();
                     this.time = 60;
                     await this.setTimeCounter()
-                }else{
+                } else {
                     console.log((this.time) + " sec...");
                     setTimeout(this.setTimeCounter, 1000);
                 }

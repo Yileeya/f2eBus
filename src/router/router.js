@@ -29,6 +29,11 @@ const routes = [
                 name: 'schedule',
                 component: () => import('../components/Schedule/SchedulePage')
             },
+            {
+                path: 'timeArrivalMap',
+                name: 'timeArrivalMap',
+                component: () => import('../components/TimeArrivalPage/TimeArrivalMapPage')
+            },
         ]
     }
 
