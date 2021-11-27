@@ -1,5 +1,5 @@
 <template>
-    <div class="time-arrival-page" v-if="!loading">
+    <div class="time-arrival-page" v-if="busRoute">
         <div class="time-header">
             <div class="time-header-title">
                 <div class="route-name">{{ busRoute.subRouteName }}</div>
@@ -19,7 +19,7 @@
                     <span>末班車：{{ busTodaySchedule[busTodaySchedule.length - 1].ArrivalTime }}</span>
                 </div>
                 <div class="update-time">資料更新時間 <b>{{ updateTime }}</b>
-                    <span class="small">(40秒刷新一次)</span>
+                    <span class="small">({{ time }}秒後更新)</span>
                 </div>
             </div>
         </div>
@@ -74,7 +74,7 @@
                 busTodaySchedule: [],
                 updateTime: null,
                 timer: null,
-                time: 600,
+                time: 40,
                 loading: false
             }
         },
@@ -99,9 +99,10 @@
                 this.loading = true;
                 clearInterval(this.timer);
                 this.timeTable = [];
+                this.busses = [];
                 await this.fetchStopOfRoute();
                 await this.fetchEstimatedTimeOfArrival();
-                this.time = 600;
+                this.time = 40;
                 this.timer = setInterval(this.countdown, 1000);
                 this.loading = false;
             },
@@ -163,7 +164,6 @@
                 })
             },
             async switchDirection() {
-                console.log('銷毀')
                 await this.fetchTodayBusSchedule();
                 await this.fetchData();
             },
