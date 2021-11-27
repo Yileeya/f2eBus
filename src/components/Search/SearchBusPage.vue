@@ -4,7 +4,7 @@
             <div v-for="(route, index) in busRoute.SubRoutes" :key="index">
                 <div v-if="route.Direction == 0"
                      class="bus-group"
-                     @click="toTimeArrivalPage(route.SubRouteUID, route.SubRouteName.Zh_tw, route.Headsign)">
+                     @click="toTimeArrivalPage(route.SubRouteUID, route.SubRouteName.Zh_tw, route.Headsign, route.Direction)">
                     <div class="bus-number-title">
                         <i class="fa fa-bus fa-2x" aria-hidden="true"/>
                         <span class="bus-number">{{ route.SubRouteName.Zh_tw }}</span>
@@ -28,11 +28,12 @@
             this.busRoutes = await this.getBusRoutes();
         },
         methods: {
-            toTimeArrivalPage(SubRouteUID, subRouteName, headSign) {
+            toTimeArrivalPage(subRouteUID, subRouteName, headSign, direction) {
                 let busRoute = {
-                    subRouteUID: SubRouteUID,
+                    subRouteUID: subRouteUID,
                     subRouteName: subRouteName,
-                    headSign: headSign
+                    goHeadSign: headSign,
+                    direction: direction
                 }
                 this.$store.commit('UPDATE_BUS_ROUTE', busRoute)
                 this.$router.push('/timeArrival');

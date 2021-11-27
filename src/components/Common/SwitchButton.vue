@@ -1,18 +1,18 @@
 <template>
     <div class="switch-group" :class="colorGroup">
             <span class="go"
-                  :class="[{'white': isStartStop}, {'pointer': isStartStop}]"
-                  @click="isStartStop = false">
-                往{{ startAndEndStop[0] }}
+                  :class="[{'white': direction0}, {'pointer': direction0}]"
+                  @click="direction0 = false">
+                往{{ goStartAndEndStop[0] }}
             </span>
         <label class="switch">
-            <input type="checkbox" v-model="isStartStop">
+            <input type="checkbox" v-model="direction0">
             <span class="slider"></span>
         </label>
         <span class="back"
-              :class="[{'white': !isStartStop}, {'pointer': !isStartStop}]"
-              @click="isStartStop = true">
-               往{{ startAndEndStop[1] }}
+              :class="[{'white': !direction0}, {'pointer': !direction0}]"
+              @click="direction0 = true">
+               往{{ goStartAndEndStop[1] }}
             </span>
     </div>
 </template>
@@ -31,21 +31,19 @@
             })
         },
         watch: {
-            isStartStop(newVal) {
+            direction0(newVal) {
                 let routeId = this.busRoute.subRouteUID.slice(0, -1);
-                let headSign = null;
-                if(newVal == true) {
+                if(newVal == true) {// direction = 0
                     routeId = routeId + '1';
-                    headSign = this.startAndEndStop[0] + '→' + this.startAndEndStop[1]
-                } else {
+                } else { // direction = 1
                     routeId = routeId + '2';
-                    headSign = this.startAndEndStop[1] + '→' + this.startAndEndStop[0]
                 }
 
                 let busRoute = {
                     subRouteUID: routeId,
                     subRouteName: this.busRoute.subRouteName,
-                    headSign: headSign
+                    goHeadSign: this.busRoute.goHeadSign,
+                    direction: this.direction0 ? 0 : 1
                 }
                 this.$store.commit('UPDATE_BUS_ROUTE', busRoute);
                 this.$emit('switch')
@@ -53,12 +51,13 @@
         },
         data() {
             return {
-                isStartStop: true,
-                startAndEndStop: []
+                direction0: true,
+                goStartAndEndStop: []
             }
         },
         created() {
-            this.startAndEndStop = this.busRoute.headSign.split('→');
+            this.goStartAndEndStop = this.busRoute.goHeadSign.split('→');
+            this.direction0 = !this.busRoute.direction
         }
     }
 </script>
