@@ -84,7 +84,7 @@ body{
         padding:        4px 12px;
         text-align:     center;
         letter-spacing: 2px;
-        min-width:      calc(3em + 30px);
+        min-width:      calc(3em + 60px);
         font-size:      12px;
       }
       .bus-coming{
@@ -206,5 +206,18 @@ body{
     justify-content: center;
     align-items:     center;
     border-radius:   50%;
+  }
+}
+.time-schedule-info{
+  display:         flex;
+  justify-content: space-between;
+  align-items:     baseline;
+  margin-top:      10px;
+  flex-wrap:       wrap;
+  .schedule{
+    font-size: 0.8em;
+  }
+  .update-time{
+    font-size: 0.65em;
   }
 }

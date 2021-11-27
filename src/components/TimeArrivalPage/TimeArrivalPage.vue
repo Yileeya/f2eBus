@@ -1,5 +1,5 @@
 <template>
-    <div class="time-arrival-page" v-if="busRoute">
+    <div class="time-arrival-page" v-if="!loading">
         <div class="time-header">
             <div class="time-header-title">
                 <div class="route-name">{{ busRoute.subRouteName }}</div>
@@ -12,7 +12,16 @@
                     </router-link>
                 </div>
             </div>
-            <switch-button :color-group="'time-arrival-switch-group'" @switch="fetchData"/>
+            <switch-button :color-group="'time-arrival-switch-group'" @switch="switchDirection"/>
+            <div class="time-schedule-info" v-if="busTodaySchedule.length">
+                <div class="schedule">
+                    <span>首班車：{{ busTodaySchedule[0].ArrivalTime }}</span> /
+                    <span>末班車：{{ busTodaySchedule[busTodaySchedule.length - 1].ArrivalTime }}</span>
+                </div>
+                <div class="update-time">資料更新時間 <b>{{ updateTime }}</b>
+                    <span class="small">(40秒刷新一次)</span>
+                </div>
+            </div>
         </div>
         <div class="time-line-area">
             <timeline>
@@ -27,7 +36,7 @@
                         <i class="fa fa-bus" aria-hidden="true"></i>
                     </div>
                     <div class="states" :class="TimeArrivalCSS(stop.EstimateTime)">
-                        {{ TimeArrivalText(stop.EstimateTime) }}
+                        {{ TimeArrivalText(i, stop.EstimateTime, stop.IsLastBus, stop.StopID) }}
                     </div>
                     <div class="stop-name">{{ stop.StopName }}
                     </div>
@@ -42,6 +51,7 @@
     import SwitchButton from '@/components/Common/SwitchButton';
     import {mapState} from 'vuex';
     import _ from 'lodash';
+    import moment from 'moment';
 
     export default {
         name: "TimeArrivalPage",
@@ -60,8 +70,12 @@
                 stopOfRoute: [],
                 timeOfArrival: [],
                 timeTable: [],
-                time: 60,
-                busses: []
+                busses: [],
+                busTodaySchedule: [],
+                updateTime: null,
+                timer: null,
+                time: 600,
+                loading: false
             }
         },
         async created() {
@@ -69,25 +83,27 @@
                 await this.$router.push('/search');
                 return
             }
+            this.loading = true;
+            await this.fetchTodayBusSchedule();
             await this.fetchData();
-            await this.setTimeCounter()
         },
         methods: {
-            async setTimeCounter() {
-                if(this.time <= 0) {//倒數完成
-                    await this.fetchData();
-                    this.time = 60;
-                    await this.setTimeCounter()
-                } else {
-                    console.log((this.time) + " sec...");
-                    setTimeout(this.setTimeCounter, 1000);
+            countdown() {
+                if(this.time == 0) {
+                    this.fetchData();
+                    return
                 }
-                this.time -= 1;
+                this.time--;
             },
             async fetchData() {
+                this.loading = true;
+                clearInterval(this.timer);
                 this.timeTable = [];
                 await this.fetchStopOfRoute();
-                await this.fetchEstimatedTimeOfArrival()
+                await this.fetchEstimatedTimeOfArrival();
+                this.time = 600;
+                this.timer = setInterval(this.countdown, 1000);
+                this.loading = false;
             },
             async fetchStopOfRoute() {
                 let StopOfRoute = await this.getStopOfRoute(this.busRoute.subRouteUID);
@@ -95,6 +111,8 @@
             },
             async fetchEstimatedTimeOfArrival() {
                 let timeOfArrival = this.timeOfArrival = await this.getEstimatedTimeOfArrival(this.busRoute.subRouteUID);
+                this.updateTime = timeOfArrival[0].UpdateTime.substring(11, 19);
+
                 _.forEach(this.stopOfRoute, (stop) => {
                     let matchIndex = _.find(timeOfArrival, (r) => r.StopID == stop.StopID);
                     if(typeof matchIndex == 'undefined') {
@@ -121,11 +139,33 @@
                             StopName: stop.StopName.Zh_tw,
                             StopID: stop.StopID,
                             EstimateTime: EstimateTime,
-                            PlateNumb: matchIndex.PlateNumb
+                            PlateNumb: matchIndex.PlateNumb,
+                            IsLastBus: matchIndex.IsLastBus
                         }
                         this.timeTable.push(stopInfo)
                     }
                 })
+            },
+            async fetchTodayBusSchedule() {
+                let dayOfWeek = moment().day();
+                let BusSchedule = await this.getBusSchedule(this.busRoute.subRouteUID);
+                let busServiceDay = _.filter(BusSchedule[0].Timetables, (schedule) => {
+                    let ServiceDay = Object.values(schedule.ServiceDay); //轉array
+                    return ServiceDay[dayOfWeek] == 1
+                })
+                busServiceDay = _.sortBy(busServiceDay, (o) => Number(o.TripID));
+                this.busTodaySchedule = _.map(busServiceDay, (r) => {
+                    return {
+                        StopID: r.StopTimes[0].StopID,
+                        StopName: r.StopTimes[0].StopName.Zh_tw,
+                        ArrivalTime: r.StopTimes[0].ArrivalTime
+                    }
+                })
+            },
+            async switchDirection() {
+                console.log('銷毀')
+                await this.fetchTodayBusSchedule();
+                await this.fetchData();
             },
             getBus(stopId) {
                 let isOnStop = _.findIndex(this.busses, (stop) => stop.CurrentStop == stopId)
@@ -134,15 +174,28 @@
                 else
                     return false
             },
-            TimeArrivalText(time) {
-                if(time === null)
+            TimeArrivalText(index, time, IsLastBus, StopID) {
+                if(index === 0 && time === null && !IsLastBus) {
+                    return this.getNextBusTime(StopID)
+                } else if(time === null && !IsLastBus)
                     return '尚未發車'
-                else if(Number(time) == -1) {
+                else if(Number(time) == -1 || time === null && IsLastBus) {
                     return '末班車已駛離'
                 } else if(Number(time) <= 3) {
                     return '即將進站'
                 } else
                     return time + '分'
+            },
+            getNextBusTime(StopID) {
+                let nowMoment = this.dateFormat(new Date(), 'HH:mm')
+
+                let nextBusArrivalTime = _.find(this.busTodaySchedule, (schedule => {
+                    return (schedule.StopID == StopID) && (schedule.ArrivalTime >= nowMoment)
+                }))
+                if(typeof nextBusArrivalTime == 'undefined')
+                    return '尚未發車'
+                else
+                    return nextBusArrivalTime.ArrivalTime + '發車'
             },
             TimeArrivalCSS(time) {
                 if(time === null || time == -1)
@@ -151,6 +204,9 @@
                 if(Number(time) <= 3)
                     return 'bus-coming'
             }
+        },
+        beforeDestroy() {
+            clearInterval(this.timer)
         }
     }
 </script>

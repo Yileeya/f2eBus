@@ -3,7 +3,7 @@
             <span class="go"
                   :class="[{'white': isStartStop}, {'pointer': isStartStop}]"
                   @click="isStartStop = false">
-                {{ startAndEndStop[0] }}
+                往{{ startAndEndStop[0] }}
             </span>
         <label class="switch">
             <input type="checkbox" v-model="isStartStop">
@@ -12,7 +12,7 @@
         <span class="back"
               :class="[{'white': !isStartStop}, {'pointer': !isStartStop}]"
               @click="isStartStop = true">
-               {{ startAndEndStop[1] }}
+               往{{ startAndEndStop[1] }}
             </span>
     </div>
 </template>
@@ -34,7 +34,7 @@
             isStartStop(newVal) {
                 let routeId = this.busRoute.subRouteUID.slice(0, -1);
                 let headSign = null;
-                if(newVal == false) {
+                if(newVal == true) {
                     routeId = routeId + '1';
                     headSign = this.startAndEndStop[0] + '→' + this.startAndEndStop[1]
                 } else {
@@ -53,7 +53,7 @@
         },
         data() {
             return {
-                isStartStop: false,
+                isStartStop: true,
                 startAndEndStop: []
             }
         },
