@@ -23,7 +23,8 @@
                 </div>
             </div>
         </div>
-        <div class="time-line-area">
+        <loading-view v-if="loading"/>
+        <div class="time-line-area" v-else>
             <timeline>
                 <timeline-item :hollow="true"
                                v-for="(stop, i) in timeTable"
@@ -52,6 +53,7 @@
     import {mapState} from 'vuex';
     import _ from 'lodash';
     import moment from 'moment';
+    import LoadingView from '@/components/Common/LoadingView';
 
     export default {
         name: "TimeArrivalPage",
@@ -61,6 +63,7 @@
             })
         },
         components: {
+            LoadingView,
             SwitchButton,
             Timeline,
             TimelineItem
@@ -86,6 +89,7 @@
             this.loading = true;
             await this.fetchTodayBusSchedule();
             await this.fetchData();
+            this.loading = false;
         },
         methods: {
             countdown() {
@@ -96,7 +100,6 @@
                 this.time--;
             },
             async fetchData() {
-                this.loading = true;
                 clearInterval(this.timer);
                 this.timeTable = [];
                 this.busses = [];
@@ -104,7 +107,6 @@
                 await this.fetchEstimatedTimeOfArrival();
                 this.time = 40;
                 this.timer = setInterval(this.countdown, 1000);
-                this.loading = false;
             },
             async fetchStopOfRoute() {
                 let StopOfRoute = await this.getStopOfRoute(this.busRoute.subRouteUID);
@@ -164,8 +166,10 @@
                 })
             },
             async switchDirection() {
+                this.loading = true;
                 await this.fetchTodayBusSchedule();
                 await this.fetchData();
+                this.loading = false;
             },
             getBus(stopId) {
                 let isOnStop = _.findIndex(this.busses, (stop) => stop.CurrentStop == stopId)

@@ -28,7 +28,7 @@ const methods = {
             return moment(date).format(format);
         }
     },
-    async getBusRoutes(){
+    async getBusRoutes() {
         let url = `${ptxUrl}/Route/City/Chiayi?$select=SubRoutes&$format=JSON`
         let res = await axios.get(url, {
             headers: this.getAuthorizationHeader()
@@ -37,7 +37,7 @@ const methods = {
             return res.data
         }
     },
-    async getBusSchedule(subRouteUID){
+    async getBusSchedule(subRouteUID) {
         let url = `${ptxUrl}/Schedule/City/Chiayi?$filter=SubRouteUID eq '${subRouteUID}'&$top=30&$format=JSON`
         let res = await axios.get(url, {
             headers: this.getAuthorizationHeader()
@@ -46,7 +46,7 @@ const methods = {
             return res.data
         }
     },
-    async getBusOperator(OperatorID){
+    async getBusOperator(OperatorID) {
         let url = `${ptxUrl}/Operator/City/Chiayi?$select=OperatorName&$filter=OperatorID eq '${OperatorID}'&$top=30&$format=JSON`
         let res = await axios.get(url, {
             headers: this.getAuthorizationHeader()
@@ -55,7 +55,7 @@ const methods = {
             return res.data
         }
     },
-    async getStopOfRoute(subRouteUID){
+    async getStopOfRoute(subRouteUID) {
         let url = `${ptxUrl}/StopOfRoute/City/Chiayi?$filter=SubRouteUID eq '${subRouteUID}'&$format=JSON`
         let res = await axios.get(url, {
             headers: this.getAuthorizationHeader()
@@ -64,7 +64,7 @@ const methods = {
             return res.data
         }
     },
-    async getEstimatedTimeOfArrival(subRouteUID){
+    async getEstimatedTimeOfArrival(subRouteUID) {
         let url = `${ptxUrl}/EstimatedTimeOfArrival/City/Chiayi?$filter=SubRouteUID eq '${subRouteUID}'&$format=JSON`
         let res = await axios.get(url, {
             headers: this.getAuthorizationHeader()
@@ -73,6 +73,15 @@ const methods = {
             return res.data
         }
     },
+    async getRealTimeByFrequency(subRouteUID) {
+        let url = `${ptxUrl}/RealTimeByFrequency/City/Chiayi?$filter=SubRouteUID eq '${subRouteUID}'&$format=JSON`
+        let res = await axios.get(url, {
+            headers: this.getAuthorizationHeader()
+        });
+        if(res.status == 200) {
+            return res.data
+        }
+    }
 };
 Vue.mixin({
     methods: methods

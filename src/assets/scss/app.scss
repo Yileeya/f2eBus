@@ -78,23 +78,6 @@ body{
         top:          0.60em;
         border-width: 2px;
       }
-      .states{
-        background:     #EFEFF0;
-        color:          #939499;
-        padding:        4px 12px;
-        text-align:     center;
-        letter-spacing: 2px;
-        min-width:      calc(3em + 60px);
-        font-size:      12px;
-      }
-      .bus-coming{
-        background: #D35D78;
-        color:      white;
-        text-align: center;
-      }
-      .bus-leaving{
-        opacity: 0.5;
-      }
       .stop-name{
         padding:        0 10px;
         font-size:      1em;
@@ -133,22 +116,10 @@ body{
           color:                     #019EB1;
           margin-left:               5px;
           /* animation 參數設定 */
-          animation-name:            MoveToRight; /*動畫名稱，需與 keyframe 名稱對應*/
+          animation-name:            keyframeZoom; /*動畫名稱，需與 keyframe 名稱對應*/
           animation-duration:        1.3s; /*動畫持續時間，單位為秒*/
           animation-delay:           1.5s; /*動畫延遲開始時間*/
           animation-iteration-count: infinite; /*動畫次數，infinite 為無限次*/
-          /* 關鍵影格(@keyframe) */
-          @keyframes MoveToRight{
-            0%{
-              transform: scale(1);
-            }
-            50%{
-              transform: scale(1.1);
-            }
-            100%{
-              transform: scale(1);
-            }
-          }
         }
       }
     }
@@ -207,6 +178,30 @@ body{
     align-items:     center;
     border-radius:   50%;
   }
+  .bus-coming-circle{
+    background: #D35D78;
+  }
+  .bus-position{
+    z-index: 999 !important;
+    .fa-bus{
+      font-size:                 1.5em;
+      background:                #F6E04F;
+      color:                     white;
+      padding:                   5px;
+      border-radius:             5px;
+      /* animation 參數設定 */
+      animation-name:            keyframeZoom; /*動畫名稱，需與 keyframe 名稱對應*/
+      animation-duration:        1.3s; /*動畫持續時間，單位為秒*/
+      animation-delay:           1.5s; /*動畫延遲開始時間*/
+      animation-iteration-count: infinite; /*動畫次數，infinite 為無限次*/
+    }
+  }
+  .stop-popup{
+    .stop-name{
+      font-size:   1.1em;
+      font-weight: bold;
+    }
+  }
 }
 .time-schedule-info{
   display:         flex;
@@ -219,5 +214,33 @@ body{
   }
   .update-time{
     font-size: 0.65em;
+  }
+}
+.states{
+  background:     #EFEFF0;
+  color:          #939499;
+  padding:        4px 12px;
+  text-align:     center;
+  letter-spacing: 2px;
+  min-width:      calc(3em + 60px);
+  font-size:      12px;
+}
+.bus-coming{
+  background: #D35D78;
+  color:      white;
+  text-align: center;
+}
+.bus-leaving{
+  opacity: 0.5;
+}
+@keyframes keyframeZoom{ /* 關鍵影格(@keyframe) */
+  0%{
+    transform: scale(1);
+  }
+  50%{
+    transform: scale(1.1);
+  }
+  100%{
+    transform: scale(1);
   }
 }

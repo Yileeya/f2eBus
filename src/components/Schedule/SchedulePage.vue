@@ -5,7 +5,7 @@
                 <div class="route-name">{{ busRoute.subRouteName }}</div>
                 <div class="btn-group">
                     <router-link to="/timeArrival">
-                        <i class="fa fa-list-ul" aria-hidden="true"/>
+                        <i class="fa fa-code-fork" aria-hidden="true"/>
                     </router-link>
                     <router-link to="/timeArrivalMap">
                         <i class="fa fa-map" aria-hidden="true"/>
@@ -14,7 +14,8 @@
             </div>
             <switch-button :color-group="'schedule-switch-group'" @switch="fetchData"/>
         </div>
-        <div>
+        <loading-view v-if="loading"/>
+        <div v-else>
             <div class="bus-operator">
                 營運業者： {{ busOperator }}
             </div>
@@ -35,10 +36,11 @@
     import SwitchButton from '@/components/Common/SwitchButton';
     import {mapState} from 'vuex';
     import _ from 'lodash';
+    import LoadingView from '@/components/Common/LoadingView';
 
     export default {
         name: "SchedulePage",
-        components: {SwitchButton},
+        components: {LoadingView, SwitchButton},
         computed: {
             ...mapState({
                 busRoute: state => state.busRoute
@@ -48,7 +50,8 @@
             return {
                 busSchedule: null,
                 timetables: [],
-                busOperator: null
+                busOperator: null,
+                loading: false
             }
         },
         async created() {
@@ -62,12 +65,14 @@
         },
         methods: {
             async fetchData() {
+                this.loading = true;
                 let busSchedule = await this.getBusSchedule(this.busRoute.subRouteUID);
                 this.busSchedule = busSchedule[0];
                 let Timetables = this.busSchedule.Timetables;
                 this.timetables = _.sortBy(Timetables, function(o) {
                     return Number(o.TripID);
                 });
+                this.loading = false;
             },
             serviceDay(data) {
                 let arrayData = Object.values(data);

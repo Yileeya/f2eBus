@@ -1,6 +1,7 @@
 <template>
     <div class="search-page">
-        <div v-for="(busRoute,i) in busRoutes" :key="i">
+        <loading-view v-if="loading"/>
+        <div v-else v-for="(busRoute,i) in busRoutes" :key="i">
             <div v-for="(route, index) in busRoute.SubRoutes" :key="index">
                 <div v-if="route.Direction == 0"
                      class="bus-group"
@@ -17,15 +18,21 @@
 </template>
 
 <script>
+    import LoadingView from '@/components/Common/LoadingView';
+
     export default {
         name: "SearchBusPage",
+        components: {LoadingView},
         data() {
             return {
-                busRoutes: []
+                busRoutes: [],
+                loading: false
             }
         },
         async created() {
+            this.loading = true;
             this.busRoutes = await this.getBusRoutes();
+            this.loading = false;
         },
         methods: {
             toTimeArrivalPage(subRouteUID, subRouteName, headSign, direction) {
