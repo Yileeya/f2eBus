@@ -32,9 +32,10 @@ Icon.Default.mergeOptions({
   iconUrl: require("leaflet/dist/images/marker-icon.png"),
   shadowUrl: require("leaflet/dist/images/marker-shadow.png")
 });
-
 Vue.config.productionTip = false;
 
+import vSelect from 'vue-select';
+Vue.component('v-select', vSelect);
 
 import 'fontawesome-4.7';
 new Vue({
