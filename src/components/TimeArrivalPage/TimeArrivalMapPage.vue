@@ -178,10 +178,10 @@
                 let matchStop = this.timeTable[index - 1];
                 if(matchStop.EstimateTime <= 3 && matchStop.EstimateTime !== null)
                     return 'bus-coming-circle'
-            },
-            beforeDestroy() {
-                clearInterval(this.timer)
             }
+        },
+        beforeDestroy() {
+            clearInterval(this.timer)
         }
     }
 </script>

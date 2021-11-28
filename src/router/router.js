@@ -34,6 +34,11 @@ const routes = [
                 name: 'timeArrivalMap',
                 component: () => import('../components/TimeArrivalPage/TimeArrivalMapPage')
             },
+            {
+                path: 'about',
+                name: 'about',
+                component: () => import('../components/About/AboutPage')
+            }
         ]
     }
 

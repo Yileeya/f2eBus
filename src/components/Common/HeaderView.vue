@@ -24,7 +24,7 @@
             <b-navbar-nav class="ml-auto">
                 <b-navbar-nav right>
                     <b-nav-item class="right-nav-item">
-                        <router-link to="/">關於網站</router-link>
+                        <router-link to="/about">關於網站</router-link>
                     </b-nav-item>
                     <b-nav-item class="right-nav-item" href="https://tdx.transportdata.tw/api-service/swagger" target="_blank">
                         TDX 運輸資料流通服務

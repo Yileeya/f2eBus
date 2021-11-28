@@ -6,12 +6,13 @@
 $main-gray:       #939499;
 $main-yellow:     #F6E04F;
 $main-green:      #007982;
-$phone-height:    calc(100vh - 118px);
-$computer-height: calc(100vh - 126px);
+$main-green2:     #019EB1;
+$phone-height:    calc(100vh - 103px);
+$computer-height: calc(100vh - 111px);
 body{
   font-size:   16px;
   font-family: Microsoft JhengHei;
-  .schedule-page, .time-arrival-page, .search-page{
+  .schedule-page, .time-arrival-page, .search-page, .about-page{
     min-height: $computer-height;
     @media (max-width: 768px){
       min-height: $phone-height;
@@ -43,7 +44,7 @@ body{
   .county-select{
     margin:      0 14px -14px;
     width:       270px;
-    background:  #F6E04F;
+    background:  $main-yellow;
     position:    relative;
     display:     flex;
     align-items: center;
@@ -80,7 +81,7 @@ body{
   .gray-box a{
     font-size:        28px;
     font-weight:      bold;
-    background-color: #939499;
+    background-color: $main-gray;
     width:            270px;
     padding:          0.5em 1.5em;
     color:            white;
@@ -167,7 +168,7 @@ body{
         align-items:     center;
         justify-content: center;
         .bus-number{
-          background-color: #019EB1;
+          background-color: $main-green2;
           color:            white;
           padding:          2px 8px;
           border-radius:    0.8em;
@@ -176,7 +177,7 @@ body{
           .talk{
             width:         8px;
             height:        8px;
-            background:    #019EB1;
+            background:    $main-green2;
             position:      absolute;
             right:         27px;
             top:           8px;
@@ -187,7 +188,7 @@ body{
         }
         .fa-bus{
           font-size:                 1.3em;
-          color:                     #019EB1;
+          color:                     $main-green2;
           margin-left:               5px;
           /* animation 參數設定 */
           animation-name:            keyframeZoom; /*動畫名稱，需與 keyframe 名稱對應*/
@@ -245,7 +246,7 @@ body{
     font-size:       16px;
     width:           24px;
     height:          24px;
-    background:      #019EB1;
+    background:      $main-green2;
     color:           white;
     display:         flex;
     justify-content: center;
@@ -259,7 +260,7 @@ body{
     z-index: 999 !important;
     .fa-bus{
       font-size:                 1.5em;
-      background:                #F6E04F;
+      background:                $main-yellow;
       color:                     white;
       padding:                   5px;
       border-radius:             5px;
@@ -290,9 +291,50 @@ body{
     font-size: 0.65em;
   }
 }
+.about-page{
+  .title-header{
+    background:     $main-green2;
+    display:        flex;
+    flex-direction: column;
+    align-items:    flex-start;
+    color:          white;
+    h3{
+      color:       $main-yellow;
+      font-weight: bold;
+    }
+    .link-text{
+      margin-top: 15px;
+    }
+    a{
+      color:           white;
+      text-decoration: none;
+      &:hover, &:active{
+        opacity:         0.9;
+        text-decoration: underline;
+      }
+    }
+  }
+  .group-member{
+    .member{
+      display:     flex;
+      margin:      30px 0;
+      align-items: center;
+      img{
+        margin: 0 15px;
+        width:  60px;
+      }
+      .name{
+        font-size: 1.3em;
+      }
+      .work{
+        color: $main-gray;
+      }
+    }
+  }
+}
 .states{
   background:     #EFEFF0;
-  color:          #939499;
+  color:          $main-gray;
   padding:        4px 12px;
   text-align:     center;
   letter-spacing: 2px;
