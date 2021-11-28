@@ -83,7 +83,7 @@
         },
         async created() {
             if(!this.busRoute) {
-                await this.$router.push('/search');
+                await this.$router.push('/');
                 return
             }
             this.loading = true;
@@ -112,11 +112,13 @@
             },
             async fetchStopOfRoute() {
                 let StopOfRoute = await this.getStopOfRoute(this.busRoute.subRouteUID);
+                if(!StopOfRoute.length)
+                    return
                 this.stopOfRoute = StopOfRoute[0].Stops
             },
             async fetchEstimatedTimeOfArrival() {
                 let timeOfArrival = this.timeOfArrival = await this.getEstimatedTimeOfArrival(this.busRoute.subRouteUID);
-                this.updateTime = timeOfArrival[0].UpdateTime.substring(11, 19);
+                this.updateTime = timeOfArrival.length ? timeOfArrival[0].UpdateTime.substring(11, 19) : this.dateFormat(new Date(), 'HH:mm:ss');
 
                 _.forEach(this.stopOfRoute, (stop) => {
                     let matchIndex = _.find(timeOfArrival, (r) => r.StopID == stop.StopID);
@@ -154,6 +156,9 @@
             async fetchTodayBusSchedule() {
                 let dayOfWeek = moment().day();
                 let BusSchedule = await this.getBusSchedule(this.busRoute.subRouteUID);
+                if(!BusSchedule.length)
+                    return
+
                 let busServiceDay = _.filter(BusSchedule[0].Timetables, (schedule) => {
                     let ServiceDay = Object.values(schedule.ServiceDay); //轉array
                     return ServiceDay[dayOfWeek] == 1

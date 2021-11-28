@@ -16,7 +16,7 @@
         </div>
         <loading-view v-if="loading"/>
         <div v-else>
-            <div class="bus-operator">
+            <div class="bus-operator" v-if="busOperator">
                 營運業者： {{ busOperator }}
             </div>
             <div v-for="(schedule, i) in timetables"
@@ -48,7 +48,7 @@
         },
         data() {
             return {
-                busSchedule: null,
+                busSchedule: [],
                 timetables: [],
                 busOperator: null,
                 loading: false
@@ -56,17 +56,21 @@
         },
         async created() {
             if(!this.busRoute) {
-                await this.$router.push('/search');
+                await this.$router.push('/');
                 return
             }
             await this.fetchData();
             let busOperator = await this.getBusOperator(this.busSchedule.OperatorID);
-            this.busOperator = busOperator[0].OperatorName.Zh_tw
+            this.busOperator = busOperator.length ? busOperator[0].OperatorName.Zh_tw : null
         },
         methods: {
             async fetchData() {
                 this.loading = true;
                 let busSchedule = await this.getBusSchedule(this.busRoute.subRouteUID);
+                if(!busSchedule.length){
+                    this.loading = false;
+                    return
+                }
                 this.busSchedule = busSchedule[0];
                 let Timetables = this.busSchedule.Timetables;
                 this.timetables = _.sortBy(Timetables, function(o) {
@@ -105,12 +109,15 @@
                     let zhString = Number(string).toLocaleString('zh-Hans-CN-u-nu-hanidec')
                     let toArray = (zhString.replace(',', '')).split('');
                     let text = toArray.join('、');
+                    if(isSunday)
+                        return '週日'
+
                     return '週' + text + (isSunday ? '、日' : '')
                 }
             },
             serviceDayColor(data) {
                 let serviceDay = this.serviceDay(data);
-                if(serviceDay.notServiceDay.length)
+                if(serviceDay.notServiceDay.length >= 5)
                     return 'red-color'
             }
         }

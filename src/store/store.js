@@ -10,7 +10,8 @@ export default new Vuex.Store({
     state: {
         direction0RouteHeadSign: [],
         isLoading: false,
-        busRoute : null
+        busRoute: null,
+        county: 'Chiayi'
     },
     mutations: {
         ['UPDATE_BUS_ROUTE'](state, busRoute) {
@@ -18,15 +19,18 @@ export default new Vuex.Store({
         },
         ['UPDATE_DIRECTION_0_ROUTE_HEAD_SIGN'](state, direction0RouteHeadSign) {
             state.direction0RouteHeadSign = direction0RouteHeadSign;
+        },
+        ['UPDATE_COUNTY'](state, county) {
+            state.county = county;
         }
     },
-    actions  : {},
-    getters  : {
-        // isLoading(state) {
-        //     return state.isLoading;
-        // },
+    actions: {},
+    getters: {
+        county(state) {
+            return state.county;
+        },
     },
-    modules  : {
+    modules: {
         fare,
         route
     }

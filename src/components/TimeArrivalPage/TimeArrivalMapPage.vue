@@ -48,7 +48,7 @@
                     <div>{{ bus.PlateNumb}}</div>
                 </l-popup>
             </l-marker>
-            <l-polyline :lat-lngs="polyline.latlngs" :color="polyline.color"/>
+            <l-polyline v-if="polyline" :lat-lngs="polyline.latlngs" :color="polyline.color"/>
         </l-map>
     </div>
 </template>
@@ -91,7 +91,7 @@
         },
         async created() {
             if(!this.busRoute) {
-                await this.$router.push('/search');
+                await this.$router.push('/');
                 return
             }
             await this.fetchData();
@@ -118,6 +118,9 @@
             },
             async fetchStopOfRoute() {
                 let StopOfRoute = await this.getStopOfRoute(this.busRoute.subRouteUID);
+                if(!StopOfRoute.length)
+                    return
+
                 this.stopOfRoute = _.map(StopOfRoute[0].Stops, (stop, i) => {
                     return {
                         id: i + 1,

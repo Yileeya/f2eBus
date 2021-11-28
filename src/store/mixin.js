@@ -2,7 +2,7 @@ import moment from 'moment';
 import jsSHA from 'jssha';
 import Vue from 'vue';
 import axios from 'axios';
-// import _ from 'lodash';
+import {mapGetters} from 'vuex';
 
 let ptxUrl    = 'https://ptx.transportdata.tw/MOTC/v2/Bus';
 const methods = {
@@ -29,7 +29,7 @@ const methods = {
         }
     },
     async getBusRoutes() {
-        let url = `${ptxUrl}/Route/City/Chiayi?$select=SubRoutes&$format=JSON`
+        let url = `${ptxUrl}/Route/City/${this.county}?$select=SubRoutes&$format=JSON`
         let res = await axios.get(url, {
             headers: this.getAuthorizationHeader()
         });
@@ -38,7 +38,7 @@ const methods = {
         }
     },
     async getBusSchedule(subRouteUID) {
-        let url = `${ptxUrl}/Schedule/City/Chiayi?$filter=SubRouteUID eq '${subRouteUID}'&$top=30&$format=JSON`
+        let url = `${ptxUrl}/Schedule/City/${this.county}?$filter=SubRouteUID eq '${subRouteUID}'&$top=30&$format=JSON`
         let res = await axios.get(url, {
             headers: this.getAuthorizationHeader()
         });
@@ -47,7 +47,7 @@ const methods = {
         }
     },
     async getBusOperator(OperatorID) {
-        let url = `${ptxUrl}/Operator/City/Chiayi?$select=OperatorName&$filter=OperatorID eq '${OperatorID}'&$top=30&$format=JSON`
+        let url = `${ptxUrl}/Operator/City/${this.county}?$select=OperatorName&$filter=OperatorID eq '${OperatorID}'&$top=30&$format=JSON`
         let res = await axios.get(url, {
             headers: this.getAuthorizationHeader()
         });
@@ -56,7 +56,7 @@ const methods = {
         }
     },
     async getStopOfRoute(subRouteUID) {
-        let url = `${ptxUrl}/StopOfRoute/City/Chiayi?$filter=SubRouteUID eq '${subRouteUID}'&$format=JSON`
+        let url = `${ptxUrl}/StopOfRoute/City/${this.county}?$filter=SubRouteUID eq '${subRouteUID}'&$format=JSON`
         let res = await axios.get(url, {
             headers: this.getAuthorizationHeader()
         });
@@ -65,7 +65,7 @@ const methods = {
         }
     },
     async getEstimatedTimeOfArrival(subRouteUID) {
-        let url = `${ptxUrl}/EstimatedTimeOfArrival/City/Chiayi?$filter=SubRouteUID eq '${subRouteUID}'&$format=JSON`
+        let url = `${ptxUrl}/EstimatedTimeOfArrival/City/${this.county}?$filter=SubRouteUID eq '${subRouteUID}'&$format=JSON`
         let res = await axios.get(url, {
             headers: this.getAuthorizationHeader()
         });
@@ -74,7 +74,7 @@ const methods = {
         }
     },
     async getRealTimeByFrequency(subRouteUID) {
-        let url = `${ptxUrl}/RealTimeByFrequency/City/Chiayi?$filter=SubRouteUID eq '${subRouteUID}'&$format=JSON`
+        let url = `${ptxUrl}/RealTimeByFrequency/City/${this.county}?$filter=SubRouteUID eq '${subRouteUID}'&$format=JSON`
         let res = await axios.get(url, {
             headers: this.getAuthorizationHeader()
         });
@@ -89,7 +89,7 @@ const methods = {
      * */
     async getFareByName(SubRouteName) {
 
-        let url = `${ptxUrl}/RouteFare/City/ChiayiCounty?$filter=SubRouteName eq '${SubRouteName}'&$format=JSON`
+        let url = `${ptxUrl}/RouteFare/City/TainanCounty?$filter=SubRouteName eq '${SubRouteName}'&$format=JSON`
 
         let {status, data} = await axios.get(url, {
             headers: this.getAuthorizationHeader()
@@ -100,6 +100,11 @@ const methods = {
     }
 };
 Vue.mixin({
+    computed: {
+        ...mapGetters({
+            county: 'county'
+        })
+    },
     methods: methods
 });
 

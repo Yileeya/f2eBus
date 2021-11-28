@@ -58,7 +58,7 @@
                         let route = {
                             SubRouteUID: r.SubRouteUID,
                             SubRouteName: r.SubRouteName.Zh_tw,
-                            Headsign: r.Headsign
+                            Headsign: r.Headsign ? r.Headsign : null
                         }
                         this.busRoutes.push(route)
                     }
@@ -79,8 +79,12 @@
             },
             matchSearch(options, search) {
                 let match = _.filter(this.busRoutes, (busRoute) => {
-                    if(busRoute.SubRouteName.includes(search) || busRoute.Headsign.includes(search))
+                    if(busRoute.SubRouteName.includes(search))
                         return busRoute
+                    if(busRoute.Headsign){
+                        if(busRoute.Headsign.includes(search))
+                            return busRoute
+                    }
                 })
                 if(match.length) {
                     return match
