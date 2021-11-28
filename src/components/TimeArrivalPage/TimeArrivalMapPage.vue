@@ -12,7 +12,7 @@
                     </router-link>
                 </div>
             </div>
-            <switch-button :color-group="'time-arrival-switch-group'" @switch="fetchData"/>
+            <switch-button :color-group="'time-arrival-switch-group'" @switch="switchDirection"/>
         </div>
         <loading-view v-if="loading"/>
         <l-map v-else
@@ -94,7 +94,9 @@
                 await this.$router.push('/');
                 return
             }
+            this.loading = true;
             await this.fetchData();
+            this.loading = false;
         },
         methods: {
             countdown() {
@@ -105,7 +107,6 @@
                 this.time--;
             },
             async fetchData() {
-                this.loading = true;
                 clearInterval(this.timer);
                 this.timeTable = [];
                 this.busses = [];
@@ -114,7 +115,6 @@
                 await this.fetchRealTimeByFrequency();// 拿到公車的位置
                 this.time = 40;
                 this.timer = setInterval(this.countdown, 1000);
-                this.loading = false;
             },
             async fetchStopOfRoute() {
                 let StopOfRoute = await this.getStopOfRoute(this.busRoute.subRouteUID);
@@ -181,7 +181,12 @@
                 let matchStop = this.timeTable[index - 1];
                 if(matchStop.EstimateTime <= 3 && matchStop.EstimateTime !== null)
                     return 'bus-coming-circle'
-            }
+            },
+            async switchDirection() {
+                this.loading = true;
+                await this.fetchData();
+                this.loading = false;
+            },
         },
         beforeDestroy() {
             clearInterval(this.timer)
