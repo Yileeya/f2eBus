@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import fare from "./fare";
+
 Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
@@ -21,5 +23,7 @@ export default new Vuex.Store({
         //     return state.isLoading;
         // },
     },
-    modules: {}
+    modules: {
+        fare
+    }
 });
