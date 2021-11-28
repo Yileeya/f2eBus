@@ -8,9 +8,7 @@ import route from "./route";
 Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
-        busRoute: null,
-        direction0RouteHeadSign: []
-    state    : {
+        direction0RouteHeadSign: [],
         isLoading: false,
         busRoute : null
     },

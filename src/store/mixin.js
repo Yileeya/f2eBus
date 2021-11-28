@@ -81,7 +81,7 @@ const methods = {
         if(res.status == 200) {
             return res.data
         }
-    }
+    },
     /**
      * 取得票價
      *
