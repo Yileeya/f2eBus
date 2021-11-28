@@ -1,9 +1,9 @@
 <template>
-    <div class="switch-group" :class="colorGroup">
+    <div class="switch-group" :class="colorGroup" v-if="direction0RouteHeadSign.length">
             <span class="go"
                   :class="[{'white': direction0}, {'pointer': direction0}]"
                   @click="direction0 = false">
-                往{{ goStartAndEndStop[0] }}
+                往{{ direction0RouteHeadSign[0] }}
             </span>
         <label class="switch">
             <input type="checkbox" v-model="direction0">
@@ -12,7 +12,7 @@
         <span class="back"
               :class="[{'white': !direction0}, {'pointer': !direction0}]"
               @click="direction0 = true">
-               往{{ goStartAndEndStop[1] }}
+               往{{ direction0RouteHeadSign[1] }}
             </span>
     </div>
 </template>
@@ -27,7 +27,8 @@
         },
         computed: {
             ...mapState({
-                busRoute: state => state.busRoute
+                busRoute: state => state.busRoute,
+                direction0RouteHeadSign: state => state.direction0RouteHeadSign
             })
         },
         watch: {
@@ -42,7 +43,6 @@
                 let busRoute = {
                     subRouteUID: routeId,
                     subRouteName: this.busRoute.subRouteName,
-                    goHeadSign: this.busRoute.goHeadSign,
                     direction: this.direction0 ? 0 : 1
                 }
                 this.$store.commit('UPDATE_BUS_ROUTE', busRoute);
@@ -51,12 +51,10 @@
         },
         data() {
             return {
-                direction0: true,
-                goStartAndEndStop: []
+                direction0: true
             }
         },
         created() {
-            this.goStartAndEndStop = this.busRoute.goHeadSign.split('→');
             this.direction0 = !this.busRoute.direction
         }
     }

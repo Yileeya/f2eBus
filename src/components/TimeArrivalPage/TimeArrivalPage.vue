@@ -89,6 +89,8 @@
             this.loading = true;
             await this.fetchTodayBusSchedule();
             await this.fetchData();
+            this.$store.commit('UPDATE_DIRECTION_0_ROUTE_HEAD_SIGN',
+                [this.stopOfRoute[0].StopName.Zh_tw, this.stopOfRoute[this.stopOfRoute.length - 1].StopName.Zh_tw])
             this.loading = false;
         },
         methods: {

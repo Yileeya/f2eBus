@@ -3,15 +3,16 @@
 @import '~bootstrap-vue/dist/bootstrap-vue.css';
 @import "~fontawesome-4.7/css/font-awesome.css";
 @import '~vue-select/dist/vue-select.css';
-$main-gray:    #939499;
-$main-yellow:  #F6E04F;
-$main-green:   #007982;
-$phone-height: calc(100vh - 103px);
+$main-gray:       #939499;
+$main-yellow:     #F6E04F;
+$main-green:      #007982;
+$phone-height:    calc(100vh - 118px);
+$computer-height: calc(100vh - 126px);
 body{
   font-size:   16px;
   font-family: Microsoft JhengHei;
   .schedule-page, .time-arrival-page, .search-page{
-    min-height: $phone-height;
+    min-height: $computer-height;
     @media (max-width: 768px){
       min-height: $phone-height;
     }

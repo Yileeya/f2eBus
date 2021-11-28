@@ -40,7 +40,7 @@
                     </div>
                 </l-popup>
             </l-marker>
-            <l-marker :lat-lng="bus.BusPosition" v-for="(bus, i) in busses" :key="i">
+            <l-marker :lat-lng="bus.BusPosition" v-for="(bus, i) in busses" :key="'bus' + i">
                 <l-icon class-name="bus-position">
                     <i class="fa fa-bus" aria-hidden="true"/>
                 </l-icon>
