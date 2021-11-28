@@ -1,5 +1,15 @@
 <template>
     <div class="home">
+        <div class="county-select">
+            <i class="fa fa-map-marker" aria-hidden="true"/>
+            <v-select v-model="selectedCounty"
+                      :options="counties"
+                      :placeholder="'嘉義市'">
+                <template #no-options>
+                    無符合選項
+                </template>
+            </v-select>
+        </div>
         <div class="gray-box">
             <router-link to="/search">
                 公車動態<br>
@@ -18,41 +28,17 @@
 
 <script>
     export default {
-        name: "HomePage"
+        name: "HomePage",
+        data() {
+            return {
+                selectedCounty: '嘉義市',
+                counties: [
+                    '嘉義市'
+                ]
+            }
+        }
     }
 </script>
 
 <style scoped lang="scss">
-    .home{
-        display:         flex;
-        flex-direction:  column;
-        align-items:     flex-end;
-        justify-content: flex-end;
-        padding-bottom:  3em;
-        .gray-box a{
-            font-size:        1.8em;
-            font-weight:      bold;
-            background-color: #939499;
-            width:            fit-content;
-            padding:          0.5em 1.5em;
-            color:            white;
-            margin:           0.5em;
-            display:          flex;
-            align-items:      center;
-            transition:       all 0.2s;
-            .fa{
-                margin-left: 15px;
-            }
-            &:hover, &:focus{
-                cursor:          pointer;
-                opacity:         0.8;
-                transform:       scale(0.95);
-                transition:      all 0.2s;
-                text-decoration: none;
-            }
-            @media (max-width: 768px){
-                font-size: 1.5em;
-            }
-        }
-    }
 </style>

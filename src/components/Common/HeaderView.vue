@@ -1,9 +1,11 @@
 <template>
     <b-navbar toggleable="lg" type="dark" variant="info">
-        <b-navbar-brand href="/">F2EBus</b-navbar-brand>
-
+        <b-navbar-brand>
+            <router-link to="/">
+                <i class="fa fa-bus" aria-hidden="true"/>
+            </router-link>
+        </b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
         <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav>
                 <b-nav-item>
@@ -22,10 +24,10 @@
             <b-navbar-nav class="ml-auto">
                 <b-navbar-nav right>
                     <b-nav-item class="right-nav-item">
-                        <router-link to="/">關於網站</router-link>
+                        <router-link to="/about">關於網站</router-link>
                     </b-nav-item>
-                    <b-nav-item class="right-nav-item">
-                        <router-link to="/">TDX 運輸資料流通服務</router-link>
+                    <b-nav-item class="right-nav-item" href="https://tdx.transportdata.tw/api-service/swagger" target="_blank">
+                        TDX 運輸資料流通服務
                     </b-nav-item>
                 </b-navbar-nav>
             </b-navbar-nav>

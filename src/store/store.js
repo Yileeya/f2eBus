@@ -7,17 +7,18 @@ import route from "./route";
 
 Vue.use(Vuex);
 export default new Vuex.Store({
-    state    : {
+    state: {
+        direction0RouteHeadSign: [],
         isLoading: false,
         busRoute : null
     },
     mutations: {
-        ['UPDATE_LOADING'](state, isLoading) {
-            state.isLoading = isLoading;
-        },
         ['UPDATE_BUS_ROUTE'](state, busRoute) {
             state.busRoute = busRoute;
         },
+        ['UPDATE_DIRECTION_0_ROUTE_HEAD_SIGN'](state, direction0RouteHeadSign) {
+            state.direction0RouteHeadSign = direction0RouteHeadSign;
+        }
     },
     actions  : {},
     getters  : {

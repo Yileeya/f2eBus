@@ -2,15 +2,18 @@
 @import '~bootstrap/dist/css/bootstrap.css';
 @import '~bootstrap-vue/dist/bootstrap-vue.css';
 @import "~fontawesome-4.7/css/font-awesome.css";
-$main-color:   #939499;
-$main-yellow:  #F6E04F;
-$main-green:   #007982;
-$phone-height: calc(100vh - 101px);
+@import '~vue-select/dist/vue-select.css';
+$main-gray:       #939499;
+$main-yellow:     #F6E04F;
+$main-green:      #007982;
+$main-green2:     #019EB1;
+$phone-height:    calc(100vh - 103px);
+$computer-height: calc(100vh - 111px);
 body{
   font-size:   16px;
   font-family: Microsoft JhengHei;
-  .home, .schedule-page, .time-arrival-page, .search-page{
-    min-height: $phone-height;
+  .schedule-page, .time-arrival-page, .search-page, .about-page{
+    min-height: $computer-height;
     @media (max-width: 768px){
       min-height: $phone-height;
     }
@@ -20,37 +23,110 @@ body{
   margin: 0;
 }
 .footer{
-  background-color: #939499;
+  background-color: $main-gray;
   height:           40px;
   position:         absolute;
   width:            100%;
 }
 .home{
-  background-image: url("../images/PhoneBg.svg");
+  background-image: url("../images/home.svg");
   background-size:  cover;
-  height:           calc(100vh - 125px);
+  height:           calc(100vh - 111px);
+  display:          flex;
+  flex-direction:   column;
+  align-items:      flex-end;
+  justify-content:  flex-end;
+  padding-bottom:   3em;
+  @media (max-width: 768px){
+    background-position: 28% 100%;
+    min-height:          $phone-height;
+  }
+  .county-select{
+    margin:      0 14px -14px;
+    width:       270px;
+    background:  $main-yellow;
+    position:    relative;
+    display:     flex;
+    align-items: center;
+    padding:     0.5em 1.5em !important;
+    .fa-map-marker{
+      color:     $main-gray;
+      font-size: 30px;
+    }
+    .vs__dropdown-toggle{
+      border:        none;
+      border-radius: 0;
+      font-size:     24px;
+      width:         calc(240px - 1em);
+      .vs__selected, .vs__search, .vs__search:focus{
+        padding-left: 1em;
+        color:        $main-gray;
+        font-weight:  bold;
+      }
+      .vs__clear{
+        opacity: 0;
+      }
+    }
+    @media (max-width: 768px){
+      margin: 0 12px -12px !important;
+      width:  225px !important;
+      .vs__dropdown-toggle{
+        width: calc(225px - 2em);
+        .vs__selected, .vs__search, .vs__search:focus{
+          padding-left: 0;
+        }
+      }
+    }
+  }
+  .gray-box a{
+    font-size:        28px;
+    font-weight:      bold;
+    background-color: $main-gray;
+    width:            270px;
+    padding:          0.5em 1.5em;
+    color:            white;
+    margin:           0.5em;
+    display:          flex;
+    align-items:      center;
+    transition:       all 0.2s;
+    .fa{
+      margin-left: 15px;
+    }
+    &:hover, &:focus{
+      cursor:          pointer;
+      opacity:         0.8;
+      transform:       scale(0.95);
+      transition:      all 0.2s;
+      text-decoration: none;
+    }
+    @media (max-width: 768px){
+      font-size: 1.5em !important;
+      width:     225px !important;
+    }
+  }
 }
 .navbar{
-  background-color: #939499 !important;
-  padding-top:      1.5em;
-  .navbar-brand{
-    color:       #F6E04F;
-    font-weight: bold;
-    font-size:   1.8em;
-  }
-  .nav-link a{
-    font-size: 1.4em;
-    color:     white !important;
-    margin:    0 1em;
+  background-color: $main-gray !important;
+  a{
+    color:           white;
+    text-decoration: none;
     &:hover{
-      opacity:         0.9;
-      transform:       scale(0.95);
-      text-decoration: none;
+      opacity: 0.8;
+    }
+  }
+  .navbar-brand a{
+    color:     $main-yellow;
+    font-size: 30px;
+  }
+  .navbar-nav .nav-link{
+    color: white;
+    a{
+      font-size: 22px;
+      margin:    0 1em;
     }
   }
   .right-nav-item .nav-link a{
-    font-size: 1.1em;
-    margin:    0 1em;
+    font-size: 16px;
   }
   @media (max-width: 768px){
     padding-top: 0;
@@ -58,7 +134,6 @@ body{
     .nav-link, .right-nav-item .nav-link{
       text-align: center;
       margin:     0;
-      font-size:  1.2em;
     }
   }
 }
@@ -78,31 +153,14 @@ body{
         top:          0.60em;
         border-width: 2px;
       }
-      .states{
-        background:     #EFEFF0;
-        color:          #939499;
-        padding:        4px 12px;
-        text-align:     center;
-        letter-spacing: 2px;
-        min-width:      calc(3em + 30px);
-        font-size:      12px;
-      }
-      .bus-coming{
-        background: #D35D78;
-        color:      white;
-        text-align: center;
-      }
-      .bus-leaving{
-        opacity: 0.5;
-      }
       .stop-name{
-        padding: 0 10px;
-        font-size: 1em;
+        padding:        0 10px;
+        font-size:      1em;
         letter-spacing: 1px;
       }
       .bus-group{
         position:        absolute;
-        left:            -130px;
+        left:            calc(-115px - 15px);
         top:             1.5em;
         z-index:         99;
         width:           115px;
@@ -110,15 +168,16 @@ body{
         align-items:     center;
         justify-content: center;
         .bus-number{
-          background-color: #019EB1;
+          background-color: $main-green2;
           color:            white;
           padding:          2px 8px;
           border-radius:    0.8em;
           font-size:        12px;
+          width:            85px;
           .talk{
             width:         8px;
             height:        8px;
-            background:    #019EB1;
+            background:    $main-green2;
             position:      absolute;
             right:         27px;
             top:           8px;
@@ -129,25 +188,13 @@ body{
         }
         .fa-bus{
           font-size:                 1.3em;
-          color:                     #019EB1;
-          margin-left:               8px;
+          color:                     $main-green2;
+          margin-left:               5px;
           /* animation 參數設定 */
-          animation-name:            MoveToRight; /*動畫名稱，需與 keyframe 名稱對應*/
+          animation-name:            keyframeZoom; /*動畫名稱，需與 keyframe 名稱對應*/
           animation-duration:        1.3s; /*動畫持續時間，單位為秒*/
           animation-delay:           1.5s; /*動畫延遲開始時間*/
           animation-iteration-count: infinite; /*動畫次數，infinite 為無限次*/
-          /* 關鍵影格(@keyframe) */
-          @keyframes MoveToRight{
-            0%{
-              transform: scale(1);
-            }
-            50%{
-              transform: scale(1.1);
-            }
-            100%{
-              transform: scale(1);
-            }
-          }
         }
       }
     }
@@ -183,5 +230,133 @@ body{
         }
       }
     }
+  }
+}
+.time-arrival-map-page{
+  .bus-stop-icon{
+    background-position: 0 0;
+    margin-left:         -12px !important;
+    margin-top:          -12px !important;
+    width:               12px;
+    height:              12px;
+    transform:           translate3d(639px, -44px, 0px);
+    z-index:             -44;
+  }
+  .bus-stop-circle{
+    font-size:       16px;
+    width:           24px;
+    height:          24px;
+    background:      $main-green2;
+    color:           white;
+    display:         flex;
+    justify-content: center;
+    align-items:     center;
+    border-radius:   50%;
+  }
+  .bus-coming-circle{
+    background: #D35D78;
+  }
+  .bus-position{
+    z-index: 999 !important;
+    .fa-bus{
+      font-size:                 1.5em;
+      background:                $main-yellow;
+      color:                     white;
+      padding:                   5px;
+      border-radius:             5px;
+      /* animation 參數設定 */
+      animation-name:            keyframeZoom; /*動畫名稱，需與 keyframe 名稱對應*/
+      animation-duration:        1.3s; /*動畫持續時間，單位為秒*/
+      animation-delay:           1.5s; /*動畫延遲開始時間*/
+      animation-iteration-count: infinite; /*動畫次數，infinite 為無限次*/
+    }
+  }
+  .stop-popup{
+    .stop-name{
+      font-size:   1.1em;
+      font-weight: bold;
+    }
+  }
+}
+.time-schedule-info{
+  display:         flex;
+  justify-content: space-between;
+  align-items:     baseline;
+  margin-top:      10px;
+  flex-wrap:       wrap;
+  .schedule{
+    font-size: 0.8em;
+  }
+  .update-time{
+    font-size: 0.65em;
+  }
+}
+.about-page{
+  .title-header{
+    background:     $main-green2;
+    display:        flex;
+    flex-direction: column;
+    align-items:    flex-start;
+    color:          white;
+    h3{
+      color:       $main-yellow;
+      font-weight: bold;
+    }
+    .link-text{
+      margin-top: 15px;
+    }
+    a{
+      color:           white;
+      text-decoration: none;
+      &:hover, &:active{
+        opacity:         0.9;
+        text-decoration: underline;
+      }
+    }
+  }
+  .group-member{
+    .member{
+      display:     flex;
+      margin:      30px 0;
+      align-items: center;
+      img{
+        margin: 0 15px;
+        width:  60px;
+      }
+      .name{
+        font-size: 1.3em;
+      }
+      .work{
+        color: $main-gray;
+      }
+    }
+  }
+}
+.states{
+  background:     #EFEFF0;
+  color:          $main-gray;
+  padding:        4px 12px;
+  text-align:     center;
+  letter-spacing: 2px;
+  min-width:      calc(3em + 60px);
+  font-size:      12px;
+}
+.bus-coming{
+  background: #D35D78;
+  color:      white;
+  text-align: center;
+}
+.bus-leaving{
+  opacity: 0.5;
+}
+@keyframes keyframeZoom{ /* 關鍵影格(@keyframe) */
+  0%{
+    transform: scale(1);
+  }
+  50%{
+    transform: scale(1.1);
+  }
+  100%{
+    transform: scale(1);
   }
 }

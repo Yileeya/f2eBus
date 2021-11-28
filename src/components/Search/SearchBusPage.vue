@@ -1,12 +1,13 @@
 <template>
     <div class="search-page">
-        <div v-for="(busRoute,i) in busRoutes" :key="i">
+        <loading-view v-if="loading"/>
+        <div v-else v-for="(busRoute,i) in busRoutes" :key="i">
             <div v-for="(route, index) in busRoute.SubRoutes" :key="index">
                 <div v-if="route.Direction == 0"
                      class="bus-group"
-                     @click="toTimeArrivalPage(route.SubRouteUID, route.SubRouteName.Zh_tw, route.Headsign)">
+                     @click="toTimeArrivalPage(route.SubRouteUID, route.SubRouteName.Zh_tw, route.Direction)">
                     <div class="bus-number-title">
-                        <i class="fa fa-bus fa-2x" aria-hidden="true"/>
+                        <i class="fa fa-bus" aria-hidden="true"/>
                         <span class="bus-number">{{ route.SubRouteName.Zh_tw }}</span>
                     </div>
                     <span class="bus-route">{{ route.Headsign }}</span>
@@ -17,24 +18,31 @@
 </template>
 
 <script>
+    import LoadingView from '@/components/Common/LoadingView';
+
     export default {
         name: "SearchBusPage",
+        components: {LoadingView},
         data() {
             return {
-                busRoutes: []
+                busRoutes: [],
+                loading: false
             }
         },
         async created() {
+            this.loading = true;
             this.busRoutes = await this.getBusRoutes();
+            this.loading = false;
         },
         methods: {
-            toTimeArrivalPage(SubRouteUID, subRouteName, headSign) {
+            toTimeArrivalPage(subRouteUID, subRouteName, direction) {
                 let busRoute = {
-                    subRouteUID: SubRouteUID,
+                    subRouteUID: subRouteUID,
                     subRouteName: subRouteName,
-                    headSign: headSign
+                    direction: direction
                 }
-                this.$store.commit('UPDATE_BUS_ROUTE', busRoute)
+                this.$store.commit('UPDATE_BUS_ROUTE', busRoute);
+                this.$store.commit('UPDATE_DIRECTION_0_ROUTE_HEAD_SIGN', [])
                 this.$router.push('/timeArrival');
             }
         }
@@ -43,24 +51,23 @@
 
 <style scoped lang="scss">
     .search-page{
-        padding:    30px 0;
-        min-height: calc(100vh - 100px);
-    }
-    .bus-group{
-        display:        flex;
-        flex-direction: column;
-        margin:         15px;
-        background:     #EFEFF0;
-        padding:        15px 10px;
-        border-radius:  1em;
-        .bus-number-title{
-            .bus-number{
-                font-size: 1.5em;
-                margin:    0 10px;
+        .bus-group{
+            display:        flex;
+            flex-direction: column;
+            margin:         15px;
+            .bus-number-title{
+                .fa-bus{
+                    font-size: 24px;
+                }
+                .bus-number{
+                    margin:    0 10px;
+                    font-size: 22px;
+                }
             }
-        }
-        .bus-route{
-            font-size: 1.2em;
+            .bus-route{
+                font-size: 16px;
+                color: #939499;
+            }
         }
     }
 </style>

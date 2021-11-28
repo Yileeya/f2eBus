@@ -73,6 +73,15 @@ const methods = {
             return res.data
         }
     },
+    async getRealTimeByFrequency(subRouteUID) {
+        let url = `${ptxUrl}/RealTimeByFrequency/City/Chiayi?$filter=SubRouteUID eq '${subRouteUID}'&$format=JSON`
+        let res = await axios.get(url, {
+            headers: this.getAuthorizationHeader()
+        });
+        if(res.status == 200) {
+            return res.data
+        }
+    },
     /**
      * 取得票價
      *
