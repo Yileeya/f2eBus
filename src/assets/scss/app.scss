@@ -332,6 +332,52 @@ body{
     }
   }
 }
+.search-page{
+  .bus-group{
+    display:        flex;
+    flex-direction: column;
+    margin:         15px;
+    padding:        0 15px;
+    border-radius:  1em;
+    &:hover{
+      cursor:           pointer;
+      background-color: #EFEFF0;
+    }
+    .bus-number-title{
+      .fa-bus{
+        font-size: 24px;
+      }
+      .bus-number{
+        margin:    0 10px;
+        font-size: 22px;
+      }
+    }
+    .bus-route{
+      font-size: 16px;
+      color:     #939499;
+    }
+  }
+  .v-select{
+    width:      90%;
+    margin:     30px auto;
+    transition: 0.2s;
+    .vs__dropdown-toggle{
+      height:           45px;
+      background-color: white;
+      padding:          0 15px 4px;
+      border-radius:    20px;
+      border-color:     $main-gray;
+      border-width:     2px;
+      box-shadow:       1px 2px rgba(60, 60, 60, 0.3);
+      transition:       0.2s;
+    }
+  }
+  .vs--open .vs__dropdown-toggle{
+    border:        1px solid rgba(60, 60, 60, 0.26);
+    border-radius: 10px 10px 0 0;
+    box-shadow:    initial;
+  }
+}
 .states{
   background:     #EFEFF0;
   color:          $main-gray;
