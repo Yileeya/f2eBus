@@ -29,6 +29,13 @@ const routes = [
                 name: 'schedule',
                 component: () => import('../components/Schedule/SchedulePage')
             },
+            //票價查詢
+            {
+                path: 'fare',
+                name: 'fare',
+                component: () => import('../components/Fare/FarePage')
+            },
+
             {
                 path: 'timeArrivalMap',
                 name: 'timeArrivalMap',

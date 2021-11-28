@@ -1,11 +1,18 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import fare from "./fare";
+import route from "./route";
+
+
 Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         busRoute: null,
         direction0RouteHeadSign: []
+    state    : {
+        isLoading: false,
+        busRoute : null
     },
     mutations: {
         ['UPDATE_BUS_ROUTE'](state, busRoute) {
@@ -15,8 +22,14 @@ export default new Vuex.Store({
             state.direction0RouteHeadSign = direction0RouteHeadSign;
         }
     },
-    actions: {},
-    getters: {
+    actions  : {},
+    getters  : {
+        // isLoading(state) {
+        //     return state.isLoading;
+        // },
     },
-    modules: {}
+    modules  : {
+        fare,
+        route
+    }
 });
