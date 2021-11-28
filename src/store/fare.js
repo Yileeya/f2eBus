@@ -1,7 +1,7 @@
 import axios from "../lib/apiget";
 
 let state     = {
-    loading:false,
+    loading: false,
 
     data: {},
 };
@@ -11,8 +11,14 @@ let getters   = {
     },
 };
 let actions   = {
+    async getRouteFareByID({commit}, ID) {
+        let {data} = await axios.get(`/RouteFare/City/ChiayiCounty?$filter=RouteID eq '${ID}'&$format=JSON`);
+
+        commit('setData', data)
+    },
+
     async getRouteFareByName({commit}, SubRouteName) {
-        console.log(SubRouteName)
+
         let {data} = await axios.get(`/RouteFare/City/ChiayiCounty?$filter=SubRouteName eq '${SubRouteName}'&$format=JSON`);
 
         // console.log(data)

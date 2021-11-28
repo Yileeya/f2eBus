@@ -2,12 +2,14 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import fare from "./fare";
+import route from "./route";
+
 
 Vue.use(Vuex);
 export default new Vuex.Store({
-    state: {
+    state    : {
         isLoading: false,
-        busRoute: null
+        busRoute : null
     },
     mutations: {
         ['UPDATE_LOADING'](state, isLoading) {
@@ -17,13 +19,14 @@ export default new Vuex.Store({
             state.busRoute = busRoute;
         },
     },
-    actions: {},
-    getters: {
+    actions  : {},
+    getters  : {
         // isLoading(state) {
         //     return state.isLoading;
         // },
     },
-    modules: {
-        fare
+    modules  : {
+        fare,
+        route
     }
 });
