@@ -8,6 +8,9 @@ import 'lodash';
 import "./assets/scss/app.scss";
 import './store/mixin';
 
+import VueMeta from 'vue-meta'
+Vue.use(VueMeta)
+
 import { BootstrapVue } from 'bootstrap-vue';
 Vue.use(BootstrapVue);
 

@@ -1,27 +1,40 @@
 import moment from 'moment';
-import jsSHA from 'jssha';
 import Vue from 'vue';
+import store from './store';
 import axios from 'axios';
 import {mapGetters} from 'vuex';
+import qs from 'qs';
+import _ from 'lodash';
 
-let ptxUrl    = 'https://ptx.transportdata.tw/MOTC/v2/Bus';
+let tdxUrl = 'https://tdx.transportdata.tw';
+let tdxApiUrl = 'https://tdx.transportdata.tw/api/basic/v2/Bus';
 const methods = {
-    getAuthorizationHeader() {
-        let AppID     = '4ad9f73726a0409a9376afd2b59e59a7';
-        let AppKey    = 'iR-j7mJI1CY924a-xfd6vhXZciM';
-        let GMTString = new Date().toGMTString();
-        let ShaObj    = new jsSHA('SHA-1', 'TEXT');
-        ShaObj.setHMACKey(AppKey, 'TEXT');
-        ShaObj.update('x-date: ' + GMTString);
-        let HMAC          = ShaObj.getHMAC('B64');
-        let Authorization = 'hmac username="' + AppID + '", algorithm="hmac-sha1", headers="x-date", signature="' + HMAC + '"';
-        return {'Authorization': Authorization, 'X-Date': GMTString}
+    async getToken() {
+        let $store = null;
+        if(typeof this.$store !== 'undefined')
+            $store = this.$store;
+        else
+            $store = store;
+
+        let clientData = qs.stringify({
+            grant_type: 'client_credentials',
+            client_id: 'yileefrontend-163e8add-96da-4ac3',
+            client_secret: '6f30a2fa-3367-41ac-a7f4-1aa0c4bd217c'
+        });
+        let res = await axios.post(`${tdxUrl}/auth/realms/TDXConnect/protocol/openid-connect/token`, clientData, {
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded'
+            }
+        });
+        res = res.data;
+        // console.log('access_token', res.access_token)
+        $store.commit('UPDATE_ACCESS_TOKEN', res.access_token);
     },
     dateFormat(date, format) {
-        if (!date)
+        if(!date)
             return null;
 
-        if (date instanceof Date) {
+        if(date instanceof Date) {
             return moment(date).format(format);
         } else {
             date = date.replace(/-/g, '/');
@@ -29,80 +42,105 @@ const methods = {
         }
     },
     async getBusRoutes() {
-        let url = `${ptxUrl}/Route/City/${this.county}?$select=SubRoutes&$format=JSON`
+        let $store = null;
+        if(typeof this.$store !== 'undefined')
+            $store = this.$store;
+        else
+            $store = store;
+
+        let url = `${tdxApiUrl}/Route/City/${this.county}?$select=RouteID, SubRoutes&$format=JSON`
         let res = await axios.get(url, {
-            headers: this.getAuthorizationHeader()
-        });
-        if (res.status == 200) {
-            return res.data
-        }
-    },
-    async getBusSchedule(subRouteUID) {
-        let url = `${ptxUrl}/Schedule/City/${this.county}?$filter=SubRouteUID eq '${subRouteUID}'&$top=30&$format=JSON`
-        let res = await axios.get(url, {
-            headers: this.getAuthorizationHeader()
-        });
-        if (res.status == 200) {
-            return res.data
-        }
-    },
-    async getBusOperator(OperatorID) {
-        let url = `${ptxUrl}/Operator/City/${this.county}?$select=OperatorName&$filter=OperatorID eq '${OperatorID}'&$top=30&$format=JSON`
-        let res = await axios.get(url, {
-            headers: this.getAuthorizationHeader()
-        });
-        if (res.status == 200) {
-            return res.data
-        }
-    },
-    async getStopOfRoute(subRouteUID) {
-        let url = `${ptxUrl}/StopOfRoute/City/${this.county}?$filter=SubRouteUID eq '${subRouteUID}'&$format=JSON`
-        let res = await axios.get(url, {
-            headers: this.getAuthorizationHeader()
-        });
-        if (res.status == 200) {
-            return res.data
-        }
-    },
-    async getEstimatedTimeOfArrival(subRouteUID) {
-        let url = `${ptxUrl}/EstimatedTimeOfArrival/City/${this.county}?$filter=SubRouteUID eq '${subRouteUID}'&$format=JSON`
-        let res = await axios.get(url, {
-            headers: this.getAuthorizationHeader()
-        });
-        if (res.status == 200) {
-            return res.data
-        }
-    },
-    async getRealTimeByFrequency(subRouteUID) {
-        let url = `${ptxUrl}/RealTimeByFrequency/City/${this.county}?$filter=SubRouteUID eq '${subRouteUID}'&$format=JSON`
-        let res = await axios.get(url, {
-            headers: this.getAuthorizationHeader()
+            headers: {"authorization": "Bearer " + this.accessToken}
         });
         if(res.status == 200) {
-            return res.data
+            let apiBusRoutes = _.map(res.data, (route) => {
+                let directionSubRoutes = _.map(route.SubRoutes, (subRoute) => {
+                    return {
+                        SubRouteID: subRoute.SubRouteID,
+                        SubRouteName: subRoute.SubRouteName.Zh_tw,
+                        Headsign: subRoute.Headsign,
+                        Direction: subRoute.Direction,
+                    }
+                })
+                return {
+                    RouteID: route.RouteID,
+                    SubRoutes: directionSubRoutes
+                }
+            })
+
+            let busRoutes = [];
+            _.each(apiBusRoutes, (busRoute) => {
+                _.each(busRoute.SubRoutes, (subRoute) => {
+                    subRoute.RouteID = busRoute.RouteID;
+                    busRoutes.push(subRoute)
+                })
+            })
+
+            $store.commit('UPDATE_BUS_ROUTES', busRoutes);
         }
     },
-    /**
-     * 取得票價
-     *
-     * 測試中
-     * */
-    async getFareByName(SubRouteName) {
-
-        let url = `${ptxUrl}/RouteFare/City/TainanCounty?$filter=SubRouteName eq '${SubRouteName}'&$format=JSON`
-
-        let {status, data} = await axios.get(url, {
-            headers: this.getAuthorizationHeader()
-        });
-        if (status == 200) {
-            return data;
+    async getBusSchedule(SubRouteID) {
+        let url = `${tdxApiUrl}/Schedule/City/${this.county}?$filter=SubRouteID eq '${SubRouteID}'&$top=30&$format=JSON`
+        try {
+            let res = await axios.get(url, {
+                headers: {"authorization": "Bearer " + this.accessToken}
+            });
+            if(res.status == 200) {
+                return res.data
+            }
+        } catch(error) {
+            console.log('getBusSchedule', error)
+            return []
+        }
+    },
+    async getStopOfRoute(SubRouteID) {
+        let url = `${tdxApiUrl}/StopOfRoute/City/${this.county}?$filter=SubRouteID eq '${SubRouteID}'&$format=JSON`
+        try {
+            let res = await axios.get(url, {
+                headers: {"authorization": "Bearer " + this.accessToken}
+            });
+            if(res.status == 200) {
+                return res.data
+            }
+        } catch(error) {
+            console.log('getStopOfRoute', error)
+            return []
+        }
+    },
+    async getEstimatedTimeOfArrival(SubRouteID) {
+        let url = `${tdxApiUrl}/EstimatedTimeOfArrival/City/${this.county}?$filter=SubRouteID eq '${SubRouteID}'&$format=JSON`
+        try {
+            let res = await axios.get(url, {
+                headers: {"authorization": "Bearer " + this.accessToken}
+            });
+            if(res.status == 200) {
+                return res.data
+            }
+        } catch(error) {
+            console.log('getEstimatedTimeOfArrival', error)
+            return []
+        }
+    },
+    async getRealTimeByFrequency(SubRouteID) {
+        let url = `${tdxApiUrl}/RealTimeByFrequency/City/${this.county}?$filter=SubRouteID eq '${SubRouteID}'&$format=JSON`
+        try {
+            let res = await axios.get(url, {
+                headers: {"authorization": "Bearer " + this.accessToken}
+            });
+            if(res.status == 200) {
+                return res.data
+            }
+        } catch(error) {
+            console.log('getRealTimeByFrequency', error)
+            return []
         }
     }
 };
 Vue.mixin({
     computed: {
         ...mapGetters({
-            county: 'county'
+            county: 'county',
+            accessToken: 'accessToken'
         })
     },
     methods: methods

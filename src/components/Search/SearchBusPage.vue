@@ -3,7 +3,7 @@
         <v-select v-model="selectedBusRoute"
                   placeholder="請輸入搜尋關鍵字"
                   :filter="matchSearch"
-                  :options="busRoutes"
+                  :options="singleDirectionBusRoutes"
                   :get-option-label="(option) => option.SubRouteName">
             <template #option="{ SubRouteName, Headsign }">
                 {{ SubRouteName }}
@@ -14,12 +14,13 @@
                 無符合選項
             </template>
         </v-select>
-        <loading-view v-if="loading"/>
-        <div v-else v-for="(busRoute,i) in busRoutes" :key="i">
+        <div class="bus-group-area">
             <div class="bus-group"
-                 @click="toTimeArrivalPage(busRoute.SubRouteUID, busRoute.SubRouteName)">
+                 v-for="busRoute in singleDirectionBusRoutes"
+                 :key="busRoute.SubRouteID"
+                 @click="toTimeArrivalPage(busRoute)">
                 <div class="bus-number-title">
-                    <i class="fa fa-bus" aria-hidden="true"/>
+                    <i class="fa fa-bus" :style="{color: setBusIconColor(busRoute.RouteID)}"/>
                     <span class="bus-number">{{ busRoute.SubRouteName }}</span>
                 </div>
                 <span class="bus-route">{{ busRoute.Headsign }}</span>
@@ -29,59 +30,47 @@
 </template>
 
 <script>
-    import LoadingView from '@/components/Common/LoadingView';
     import _ from 'lodash';
+    import {mapState} from 'vuex';
 
     export default {
         name: "SearchBusPage",
-        components: {LoadingView},
+        computed: {
+            ...mapState({
+                busRoutes: state => state.busRoutes
+            }),
+            singleDirectionBusRoutes() {
+                return _.filter(this.busRoutes, (busRoute) => !busRoute.Direction).map((match) => {
+                    match.Headsign = match.Headsign.replace('→', ' ↔ ');
+                    return match
+                })
+            }
+        },
         watch: {
             selectedBusRoute(newVal) {
                 if(newVal) {
-                    this.toTimeArrivalPage(newVal.SubRouteUID, newVal.SubRouteName)
+                    this.toTimeArrivalPage()
                 }
             }
         },
         data() {
             return {
-                busRoutes: [],
                 loading: false,
                 selectedBusRoute: null
             }
         },
-        async created() {
-            this.loading = true;
-            let busRoutes = await this.getBusRoutes();
-            _.each(busRoutes, (busRoute) => {
-                _.each(busRoute.SubRoutes, (r) => {
-                    if(r.Direction === 0) {
-                        let route = {
-                            SubRouteUID: r.SubRouteUID,
-                            SubRouteName: r.SubRouteName.Zh_tw,
-                            Headsign: r.Headsign ? r.Headsign : null
-                        }
-                        this.busRoutes.push(route)
-                    }
-                })
-            })
-            this.loading = false;
-        },
         methods: {
-            toTimeArrivalPage(subRouteUID, subRouteName) {
-                let busRoute = {
-                    subRouteUID: subRouteUID,
-                    subRouteName: subRouteName,
-                    direction: 0
-                }
-                this.$store.commit('UPDATE_BUS_ROUTE', busRoute);
-                this.$store.commit('UPDATE_DIRECTION_0_ROUTE_HEAD_SIGN', [])
-                this.$router.push('/timeArrival');
+            toTimeArrivalPage(busRoute) {
+                if(busRoute) //使用點擊
+                    this.selectedBusRoute = busRoute;
+                this.$store.commit('UPDATE_SELECTED_BUS_ROUTE', this.selectedBusRoute);
+                this.$router.push('timeArrival');
             },
             matchSearch(options, search) {
-                let match = _.filter(this.busRoutes, (busRoute) => {
+                let match = _.filter(this.singleDirectionBusRoutes, (busRoute) => {
                     if(busRoute.SubRouteName.includes(search))
                         return busRoute
-                    if(busRoute.Headsign){
+                    if(busRoute.Headsign) {
                         if(busRoute.Headsign.includes(search))
                             return busRoute
                     }
@@ -91,6 +80,11 @@
                 } else {
                     return []
                 }
+            },
+            setBusIconColor(routeId) {
+                if(routeId === '0714') return '#4eba66'
+                else if(routeId === '0715') return '#ffc107'
+                else return '#e32525'
             }
         }
     }

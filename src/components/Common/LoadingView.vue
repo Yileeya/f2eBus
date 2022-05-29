@@ -18,11 +18,11 @@
         justify-content: center;
         align-items:     center;
         flex-direction:  column;
-        position:        absolute;
+        position:        fixed;
         width:           100%;
         top:             0;
         height:          100vh;
-        z-index:         999;
+        z-index:         2000;
         opacity:         0.9;
         .fa-bus{
             font-size:                 5em;

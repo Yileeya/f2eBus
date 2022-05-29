@@ -1,27 +1,27 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import fare from "./fare";
-import route from "./route";
-
-
 Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
-        direction0RouteHeadSign: [],
         isLoading: false,
-        busRoute: null,
-        county: 'Chiayi'
+        accessToken: null,
+        county: 'Chiayi',
+        busRoutes: [],
+        selectedBusRoute: null
     },
     mutations: {
-        ['UPDATE_BUS_ROUTE'](state, busRoute) {
-            state.busRoute = busRoute;
+        ['UPDATE_IS_LOADING'](state, isLoading) {
+            state.isLoading = isLoading;
         },
-        ['UPDATE_DIRECTION_0_ROUTE_HEAD_SIGN'](state, direction0RouteHeadSign) {
-            state.direction0RouteHeadSign = direction0RouteHeadSign;
+        ['UPDATE_ACCESS_TOKEN'](state, accessToken) {
+            state.accessToken = accessToken;
         },
-        ['UPDATE_COUNTY'](state, county) {
-            state.county = county;
+        ['UPDATE_BUS_ROUTES'](state, busRoutes) {
+            state.busRoutes = busRoutes;
+        },
+        ['UPDATE_SELECTED_BUS_ROUTE'](state, selectedBusRoute) {
+            state.selectedBusRoute = selectedBusRoute;
         }
     },
     actions: {},
@@ -29,9 +29,8 @@ export default new Vuex.Store({
         county(state) {
             return state.county;
         },
-    },
-    modules: {
-        fare,
-        route
+        accessToken(state) {
+            return state.accessToken
+        }
     }
 });

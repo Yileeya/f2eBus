@@ -7,13 +7,14 @@ $main-gray:       #939499;
 $main-yellow:     #F6E04F;
 $main-green:      #007982;
 $main-green2:     #019EB1;
-$phone-height:    calc(100vh - 103px);
-$computer-height: calc(100vh - 111px);
+$phone-height:    calc(100vh - 40px);
+$computer-height: calc(100vh - 40px);
 body{
   font-size:   16px;
   font-family: Microsoft JhengHei;
-  .schedule-page, .time-arrival-page, .search-page, .about-page{
-    min-height: $computer-height;
+  .search-page{
+    padding-top: 20px;
+    min-height:  $computer-height;
     @media (max-width: 768px){
       min-height: $phone-height;
     }
@@ -21,6 +22,48 @@ body{
 }
 .row{
   margin: 0;
+}
+.left-sidebar{
+  position: fixed;
+  z-index:  9999;
+  .fa-bars{
+    display:         flex;
+    justify-content: center;
+    align-items:     center;
+    height:          50px;
+    width:           50px;
+    &:hover{
+      cursor:  pointer;
+      opacity: 0.8;
+    }
+  }
+  .b-sidebar{
+    text-align: center;
+    .router-link{
+      font-size:      36px;
+      letter-spacing: 5px;
+      font-weight:    bold;
+      margin:         0.8em 0;
+    }
+    .about{
+      position: absolute;
+      width:    100%;
+      bottom:   20%;
+      p{
+        margin:         5px 0;
+        line-height:    initial;
+        letter-spacing: 1px;
+        font-size:      14px;
+      }
+    }
+    a{
+      color: $main-gray !important;
+      &:hover{
+        text-decoration: none;
+        opacity:         0.8;
+      }
+    }
+  }
 }
 .footer{
   background-color: $main-gray;
@@ -31,51 +74,33 @@ body{
 .home{
   background-image: url("../images/home.svg");
   background-size:  cover;
-  height:           calc(100vh - 111px);
+  height:           calc(100vh - 40px);
   display:          flex;
   flex-direction:   column;
   align-items:      flex-end;
   justify-content:  flex-end;
   padding-bottom:   3em;
   @media (max-width: 768px){
-    background-position: 28% 100%;
+    background-position: 25% 100%;
     min-height:          $phone-height;
   }
-  .county-select{
+  .county-div{
     margin:      0 14px -14px;
     width:       270px;
     background:  $main-yellow;
     position:    relative;
     display:     flex;
     align-items: center;
-    padding:     0.5em 1.5em !important;
+    padding:     1em 1.5em !important;
     .fa-map-marker{
       color:     $main-gray;
       font-size: 30px;
     }
-    .vs__dropdown-toggle{
-      border:        none;
-      border-radius: 0;
-      font-size:     24px;
-      width:         calc(240px - 1em);
-      .vs__selected, .vs__search, .vs__search:focus{
-        padding-left: 1em;
-        color:        $main-gray;
-        font-weight:  bold;
-      }
-      .vs__clear{
-        opacity: 0;
-      }
-    }
-    @media (max-width: 768px){
-      margin: 0 12px -12px !important;
-      width:  225px !important;
-      .vs__dropdown-toggle{
-        width: calc(225px - 2em);
-        .vs__selected, .vs__search, .vs__search:focus{
-          padding-left: 0;
-        }
-      }
+    h3{
+      margin:         0 15px;
+      color:          $main-gray;
+      font-weight:    bold;
+      letter-spacing: 3px;
     }
   }
   .gray-box a{
@@ -101,40 +126,144 @@ body{
     }
     @media (max-width: 768px){
       font-size: 1.5em !important;
-      width:     225px !important;
     }
   }
 }
-.navbar{
-  background-color: $main-gray !important;
-  a{
+.time-arrival-map-page{
+  .bus-stop-icon{
+    background-position: 0 0;
+    margin-left:         -12px !important;
+    margin-top:          -12px !important;
+    width:               12px;
+    height:              12px;
+    transform:           translate3d(639px, -44px, 0px);
+    z-index:             -44;
+  }
+  .bus-stop-circle{
+    font-size:       16px;
+    width:           24px;
+    height:          24px;
+    background:      $main-green2;
     color:           white;
-    text-decoration: none;
-    &:hover{
-      opacity: 0.8;
+    display:         flex;
+    justify-content: center;
+    align-items:     center;
+    border-radius:   50%;
+  }
+  .bus-coming-circle{
+    background: #D35D78;
+  }
+  .bus-position{
+    z-index: 999 !important;
+    .fa-bus{
+      font-size:                 1.5em;
+      background:                $main-yellow;
+      color:                     white;
+      padding:                   5px;
+      border-radius:             5px;
+      /* animation 參數設定 */
+      animation-name:            keyframeZoom; /*動畫名稱，需與 keyframe 名稱對應*/
+      animation-duration:        1.3s; /*動畫持續時間，單位為秒*/
+      animation-delay:           1.5s; /*動畫延遲開始時間*/
+      animation-iteration-count: infinite; /*動畫次數，infinite 為無限次*/
     }
   }
-  .navbar-brand a{
-    color:     $main-yellow;
-    font-size: 30px;
-  }
-  .navbar-nav .nav-link{
-    color: white;
-    a{
-      font-size: 22px;
-      margin:    0 1em;
+  .stop-popup{
+    .stop-name{
+      font-size:   1.1em;
+      font-weight: bold;
     }
   }
-  .right-nav-item .nav-link a{
-    font-size: 16px;
+}
+.search-page{
+  .bus-group-area{
+    display:   flex;
+    flex-wrap: wrap;
+    width:     90%;
+    margin:    auto;
+    .bus-group{
+      display:        flex;
+      flex-direction: column;
+      margin:         15px;
+      padding:        15px;
+      border-radius:  1em;
+      width:          30%;
+      min-width:      340px;
+      &:hover{
+        cursor:           pointer;
+        background-color: #EFEFF0;
+      }
+      .bus-number-title{
+        .fa-bus{
+          font-size: 28px;
+        }
+        .bus-number{
+          margin:    0 10px;
+          font-size: 22px;
+        }
+      }
+      .bus-route{
+        font-size: 16px;
+        color:     #939499;
+      }
+    }
+  }
+  .v-select{
+    width:      90%;
+    margin:     30px auto;
+    transition: 0.2s;
+    .vs__dropdown-toggle{
+      height:           45px;
+      background-color: white;
+      padding:          0 15px 4px;
+      border-radius:    20px;
+      border-color:     $main-gray;
+      border-width:     2px;
+      box-shadow:       1px 2px rgba(60, 60, 60, 0.3);
+      transition:       0.2s;
+    }
+  }
+  .vs--open .vs__dropdown-toggle{
+    border:        1px solid rgba(60, 60, 60, 0.26);
+    border-radius: 10px 10px 0 0;
+    box-shadow:    initial;
   }
   @media (max-width: 768px){
-    padding-top: 0;
-    transition:  0.2s;
-    .nav-link, .right-nav-item .nav-link{
-      text-align: center;
-      margin:     0;
+    .bus-group-area{
+      width: 100%;
+      .bus-group{
+        width:   100% !important;
+        padding: 0 15px;
+      }
     }
+  }
+}
+.states{
+  background:     #EFEFF0;
+  color:          $main-gray;
+  padding:        4px 12px;
+  text-align:     center;
+  letter-spacing: 2px;
+  min-width:      calc(3em + 60px);
+  font-size:      12px;
+}
+.bus-coming{
+  background: #D35D78;
+  color:      white;
+  text-align: center;
+}
+.bus-leaving{
+  opacity: 0.5;
+}
+@keyframes keyframeZoom{ /* 關鍵影格(@keyframe) */
+  0%{
+    transform: scale(1);
+  }
+  50%{
+    transform: scale(1.1);
+  }
+  100%{
+    transform: scale(1);
   }
 }
 .time-line-area{
@@ -198,211 +327,5 @@ body{
         }
       }
     }
-  }
-}
-.time-header{
-  padding:   15px;
-  font-size: 1.2em;
-  .time-header-title{
-    display:         flex;
-    justify-content: space-between;
-    margin-bottom:   15px;
-    .route-name{
-      font-weight: bold;
-      font-size:   1.2em;
-    }
-    .btn-group{
-      display: flex;
-      .fa{
-        background:      #333333;
-        color:           white;
-        border-radius:   5px;
-        width:           35px;
-        height:          35px;
-        display:         flex;
-        justify-content: center;
-        align-items:     center;
-        margin:          0 5px;
-        &:hover, &:focus{
-          cursor:    pointer;
-          opacity:   0.9;
-          transform: scale(0.95);
-        }
-      }
-    }
-  }
-}
-.time-arrival-map-page{
-  .bus-stop-icon{
-    background-position: 0 0;
-    margin-left:         -12px !important;
-    margin-top:          -12px !important;
-    width:               12px;
-    height:              12px;
-    transform:           translate3d(639px, -44px, 0px);
-    z-index:             -44;
-  }
-  .bus-stop-circle{
-    font-size:       16px;
-    width:           24px;
-    height:          24px;
-    background:      $main-green2;
-    color:           white;
-    display:         flex;
-    justify-content: center;
-    align-items:     center;
-    border-radius:   50%;
-  }
-  .bus-coming-circle{
-    background: #D35D78;
-  }
-  .bus-position{
-    z-index: 999 !important;
-    .fa-bus{
-      font-size:                 1.5em;
-      background:                $main-yellow;
-      color:                     white;
-      padding:                   5px;
-      border-radius:             5px;
-      /* animation 參數設定 */
-      animation-name:            keyframeZoom; /*動畫名稱，需與 keyframe 名稱對應*/
-      animation-duration:        1.3s; /*動畫持續時間，單位為秒*/
-      animation-delay:           1.5s; /*動畫延遲開始時間*/
-      animation-iteration-count: infinite; /*動畫次數，infinite 為無限次*/
-    }
-  }
-  .stop-popup{
-    .stop-name{
-      font-size:   1.1em;
-      font-weight: bold;
-    }
-  }
-}
-.time-schedule-info{
-  display:         flex;
-  justify-content: space-between;
-  align-items:     baseline;
-  margin-top:      10px;
-  flex-wrap:       wrap;
-  .schedule{
-    font-size: 0.8em;
-  }
-  .update-time{
-    font-size: 0.65em;
-  }
-}
-.about-page{
-  .title-header{
-    background:     $main-green2;
-    display:        flex;
-    flex-direction: column;
-    align-items:    flex-start;
-    color:          white;
-    h3{
-      color:       $main-yellow;
-      font-weight: bold;
-    }
-    .link-text{
-      margin-top: 15px;
-    }
-    a{
-      color:           white;
-      text-decoration: none;
-      &:hover, &:active{
-        opacity:         0.9;
-        text-decoration: underline;
-      }
-    }
-  }
-  .group-member{
-    .member{
-      display:     flex;
-      margin:      30px 0;
-      align-items: center;
-      img{
-        margin: 0 15px;
-        width:  60px;
-      }
-      .name{
-        font-size: 1.3em;
-      }
-      .work{
-        color: $main-gray;
-      }
-    }
-  }
-}
-.search-page{
-  .bus-group{
-    display:        flex;
-    flex-direction: column;
-    margin:         15px;
-    padding:        0 15px;
-    border-radius:  1em;
-    &:hover{
-      cursor:           pointer;
-      background-color: #EFEFF0;
-    }
-    .bus-number-title{
-      .fa-bus{
-        font-size: 24px;
-      }
-      .bus-number{
-        margin:    0 10px;
-        font-size: 22px;
-      }
-    }
-    .bus-route{
-      font-size: 16px;
-      color:     #939499;
-    }
-  }
-  .v-select{
-    width:      90%;
-    margin:     30px auto;
-    transition: 0.2s;
-    .vs__dropdown-toggle{
-      height:           45px;
-      background-color: white;
-      padding:          0 15px 4px;
-      border-radius:    20px;
-      border-color:     $main-gray;
-      border-width:     2px;
-      box-shadow:       1px 2px rgba(60, 60, 60, 0.3);
-      transition:       0.2s;
-    }
-  }
-  .vs--open .vs__dropdown-toggle{
-    border:        1px solid rgba(60, 60, 60, 0.26);
-    border-radius: 10px 10px 0 0;
-    box-shadow:    initial;
-  }
-}
-.states{
-  background:     #EFEFF0;
-  color:          $main-gray;
-  padding:        4px 12px;
-  text-align:     center;
-  letter-spacing: 2px;
-  min-width:      calc(3em + 60px);
-  font-size:      12px;
-}
-.bus-coming{
-  background: #D35D78;
-  color:      white;
-  text-align: center;
-}
-.bus-leaving{
-  opacity: 0.5;
-}
-@keyframes keyframeZoom{ /* 關鍵影格(@keyframe) */
-  0%{
-    transform: scale(1);
-  }
-  50%{
-    transform: scale(1.1);
-  }
-  100%{
-    transform: scale(1);
   }
 }
